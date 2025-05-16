@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("OnboardingSIGDB1.Domain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3271799adaeb2c1a8b22e0d2f97e05eed80feada")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3185596b2cc69f1ff69c3ed2e257487b7c4799a4")]
 [assembly: System.Reflection.AssemblyProductAttribute("OnboardingSIGDB1.Domain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("OnboardingSIGDB1.Domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
