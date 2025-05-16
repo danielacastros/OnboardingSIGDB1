@@ -1,0 +1,74 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\daniela.soares\\RiderProjects\\OnboardingSIGDB1\\OnboardingSIGDB1.IOC\\OnboardingSIGDB1.IOC.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\daniela.soares\\RiderProjects\\OnboardingSIGDB1\\OnboardingSIGDB1.IOC\\OnboardingSIGDB1.IOC.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\daniela.soares\\RiderProjects\\OnboardingSIGDB1\\OnboardingSIGDB1.IOC\\OnboardingSIGDB1.IOC.csproj",
+        "projectName": "OnboardingSIGDB1.IOC",
+        "projectPath": "C:\\Users\\daniela.soares\\RiderProjects\\OnboardingSIGDB1\\OnboardingSIGDB1.IOC\\OnboardingSIGDB1.IOC.csproj",
+        "packagesPath": "C:\\Users\\daniela.soares\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\daniela.soares\\RiderProjects\\OnboardingSIGDB1\\OnboardingSIGDB1.IOC\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\daniela.soares\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {},
+          "https://pkgs.dev.azure.com/SIG-DN/SIG/_packaging/SigPackage/nuget/v3/index.json": {}
+        },
+        "frameworks": {
+          "net5.0": {
+            "targetAlias": "net5.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "SdkAnalysisLevel": "9.0.200"
+      },
+      "frameworks": {
+        "net5.0": {
+          "targetAlias": "net5.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.Net.Sdk.Compilers.Toolset",
+              "version": "[9.0.203, 9.0.203]"
+            }
+          ],
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.203\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

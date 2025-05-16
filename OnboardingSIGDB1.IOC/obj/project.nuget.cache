@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "HqtnmvNteTU=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\daniela.soares\\RiderProjects\\OnboardingSIGDB1\\OnboardingSIGDB1.IOC\\OnboardingSIGDB1.IOC.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\daniela.soares\\.nuget\\packages\\microsoft.net.sdk.compilers.toolset\\9.0.203\\microsoft.net.sdk.compilers.toolset.9.0.203.nupkg.sha512"
+  ],
+  "logs": []
+}
