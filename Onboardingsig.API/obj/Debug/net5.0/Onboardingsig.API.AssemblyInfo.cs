@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Onboardingsig.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fe47c26c413115612c108252146f8133a784818f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3271799adaeb2c1a8b22e0d2f97e05eed80feada")]
 [assembly: System.Reflection.AssemblyProductAttribute("Onboardingsig.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Onboardingsig.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
