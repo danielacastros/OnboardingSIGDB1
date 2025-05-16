@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Onboardingsig.API", "Onboardingsig.API\Onboardingsig.API.csproj", "{ADFE5238-A470-4D2A-BA7F-AFEC648FB8BE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnboardingSIGDB1.API", "OnboardingSIGDB1.API\OnboardingSIGDB1.API.csproj", "{ADFE5238-A470-4D2A-BA7F-AFEC648FB8BE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnboardingSIGDB1.Data", "OnboardingSIGDB1.Data\OnboardingSIGDB1.Data.csproj", "{368E35E5-0C42-4470-9334-545F0CCA0613}"
 EndProject

@@ -214,11 +214,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\daniela.soares\\RiderProjects\\OnboardingSIGDB1\\Onboardingsig.API\\Onboardingsig.API.csproj",
-      "projectName": "Onboardingsig.API",
-      "projectPath": "C:\\Users\\daniela.soares\\RiderProjects\\OnboardingSIGDB1\\Onboardingsig.API\\Onboardingsig.API.csproj",
+      "projectUniqueName": "C:\\Users\\daniela.soares\\RiderProjects\\OnboardingSIGDB1\\OnboardingSIGDB1.API\\OnboardingSIGDB1.API.csproj",
+      "projectName": "OnboardingSIGDB1.API",
+      "projectPath": "C:\\Users\\daniela.soares\\RiderProjects\\OnboardingSIGDB1\\OnboardingSIGDB1.API\\OnboardingSIGDB1.API.csproj",
       "packagesPath": "C:\\Users\\daniela.soares\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\daniela.soares\\RiderProjects\\OnboardingSIGDB1\\Onboardingsig.API\\obj\\",
+      "outputPath": "C:\\Users\\daniela.soares\\RiderProjects\\OnboardingSIGDB1\\OnboardingSIGDB1.API\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\daniela.soares\\AppData\\Roaming\\NuGet\\NuGet.Config"

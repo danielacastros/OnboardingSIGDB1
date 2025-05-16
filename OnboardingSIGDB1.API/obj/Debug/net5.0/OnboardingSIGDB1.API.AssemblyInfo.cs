@@ -11,12 +11,12 @@
 using System;
 using System.Reflection;
 
-[assembly: System.Reflection.AssemblyCompanyAttribute("OnboardingSIGDB1.Data")]
+[assembly: System.Reflection.AssemblyCompanyAttribute("OnboardingSIGDB1.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e708f25917dd2a733a016fc680ab74dd3be177e6")]
-[assembly: System.Reflection.AssemblyProductAttribute("OnboardingSIGDB1.Data")]
-[assembly: System.Reflection.AssemblyTitleAttribute("OnboardingSIGDB1.Data")]
+[assembly: System.Reflection.AssemblyProductAttribute("OnboardingSIGDB1.API")]
+[assembly: System.Reflection.AssemblyTitleAttribute("OnboardingSIGDB1.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
 
 // Gerado pela classe WriteCodeFragment do MSBuild.

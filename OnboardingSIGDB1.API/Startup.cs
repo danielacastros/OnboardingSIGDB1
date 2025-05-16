@@ -29,7 +29,7 @@ namespace Onboardingsig.API
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Onboardingsig.API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "OnboardingSIGDB1.APIVersion = "v1" });
             });
         }
 
@@ -40,7 +40,7 @@ namespace Onboardingsig.API
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Onboardingsig.API v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "OnbOnboardingSIGDB1.API;
             }
 
             app.UseHttpsRedirection();
