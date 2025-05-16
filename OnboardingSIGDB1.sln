@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Onboardingsig.API", "Onboar
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnboardingSIGDB1.Data", "OnboardingSIGDB1.Data\OnboardingSIGDB1.Data.csproj", "{368E35E5-0C42-4470-9334-545F0CCA0613}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnboardingSIGDB1.Domain", "OnboardingSIGDB1.Domain\OnboardingSIGDB1.Domain.csproj", "{ECEF40FA-6F37-497B-B946-4D6A1075FBFB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{368E35E5-0C42-4470-9334-545F0CCA0613}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{368E35E5-0C42-4470-9334-545F0CCA0613}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{368E35E5-0C42-4470-9334-545F0CCA0613}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ECEF40FA-6F37-497B-B946-4D6A1075FBFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECEF40FA-6F37-497B-B946-4D6A1075FBFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECEF40FA-6F37-497B-B946-4D6A1075FBFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECEF40FA-6F37-497B-B946-4D6A1075FBFB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
