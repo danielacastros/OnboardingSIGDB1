@@ -1,7 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net5.0</TargetFramework>
+        <TargetFramework>net9.0</TargetFramework>
     </PropertyGroup>
+
+    <ItemGroup>
+      <Folder Include="Base\" />
+      <Folder Include="Dto\" />
+      <Folder Include="Entity\" />
+      <Folder Include="Interfaces\" />
+      <Folder Include="Notifications\" />
+      <Folder Include="Services\" />
+      <Folder Include="Utils\" />
+    </ItemGroup>
 
 </Project>
