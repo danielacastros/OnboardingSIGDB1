@@ -1,0 +1,25 @@
+﻿using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using OnboardingSIGDB1.Domain.Entity;
+
+namespace OnboardingSIGDB1.Data.Contextos;
+
+public class ApplicationDbContext : DbContext
+{
+    public DbSet<Empresa> Empresas { get; set; }
+    
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+    {
+        
+    }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+    }
+
+    public async Task Commit()
+    {
+        await SaveChangesAsync();
+    }
+}
