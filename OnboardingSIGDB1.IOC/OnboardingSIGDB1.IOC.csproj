@@ -4,4 +4,14 @@
         <TargetFramework>net9.0</TargetFramework>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\OnboardingSIGDB1.Data\OnboardingSIGDB1.Data.csproj" />
+      <ProjectReference Include="..\OnboardingSIGDB1.Domain\OnboardingSIGDB1.Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.0" />
+    </ItemGroup>
+
 </Project>
