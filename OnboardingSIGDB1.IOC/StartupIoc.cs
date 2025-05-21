@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using OnboardingSIGDB1.Data.Contextos;
 using OnboardingSIGDB1.Data.Repositorios;
 using OnboardingSIGDB1.Domain.Interfaces;
+using OnboardingSIGDB1.Domain.Notifications;
 using OnboardingSIGDB1.Domain.Services;
 
 namespace OnboardingSIGDB1.IOC
@@ -13,12 +14,15 @@ namespace OnboardingSIGDB1.IOC
         public static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(configuration["ConnectionString"]));
+                options.UseSqlServer(configuration["Data Source=localhost\\SQLEXPRESS;Initial Catalog=OnboardingSIGDB1;Integrated Security=True;TrustServerCertificate=True;MultipleActiveResultSets=True"]));
 
-            services.AddScoped(typeof(IEmpresaRepositorio), typeof(RepositorioBase<>));
-
+            services.AddScoped(typeof(IRepositorio<>), typeof(RepositorioBase<>));
+            services.AddScoped(typeof(IEmpresaRepositorio), typeof(EmpresaRepositorio));
+            
             services.AddScoped<ArmazenadorDeEmpresa>();
-
+            
+            services.AddScoped<NotificationContext>();
+            
         }
     }
 }
