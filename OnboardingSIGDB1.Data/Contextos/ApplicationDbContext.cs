@@ -8,7 +8,7 @@ public class ApplicationDbContext : DbContext
 {
     public DbSet<Empresa> Empresas { get; set; }
     
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
         
     }

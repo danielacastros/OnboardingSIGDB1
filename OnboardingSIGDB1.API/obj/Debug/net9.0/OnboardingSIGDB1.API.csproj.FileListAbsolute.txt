@@ -8,6 +8,7 @@ C:\Users\daniela.soares\RiderProjects\OnboardingSIGDB1\OnboardingSIGDB1.API\bin\
 C:\Users\daniela.soares\RiderProjects\OnboardingSIGDB1\OnboardingSIGDB1.API\bin\Debug\net9.0\OnboardingSIGDB1.API.pdb
 C:\Users\daniela.soares\RiderProjects\OnboardingSIGDB1\OnboardingSIGDB1.API\bin\Debug\net9.0\Azure.Core.dll
 C:\Users\daniela.soares\RiderProjects\OnboardingSIGDB1\OnboardingSIGDB1.API\bin\Debug\net9.0\Azure.Identity.dll
+C:\Users\daniela.soares\RiderProjects\OnboardingSIGDB1\OnboardingSIGDB1.API\bin\Debug\net9.0\FluentValidation.dll
 C:\Users\daniela.soares\RiderProjects\OnboardingSIGDB1\OnboardingSIGDB1.API\bin\Debug\net9.0\Microsoft.AspNetCore.OpenApi.dll
 C:\Users\daniela.soares\RiderProjects\OnboardingSIGDB1\OnboardingSIGDB1.API\bin\Debug\net9.0\Microsoft.Bcl.AsyncInterfaces.dll
 C:\Users\daniela.soares\RiderProjects\OnboardingSIGDB1\OnboardingSIGDB1.API\bin\Debug\net9.0\Microsoft.Data.SqlClient.dll
@@ -26,6 +27,7 @@ C:\Users\daniela.soares\RiderProjects\OnboardingSIGDB1\OnboardingSIGDB1.API\bin\
 C:\Users\daniela.soares\RiderProjects\OnboardingSIGDB1\OnboardingSIGDB1.API\bin\Debug\net9.0\Microsoft.OpenApi.dll
 C:\Users\daniela.soares\RiderProjects\OnboardingSIGDB1\OnboardingSIGDB1.API\bin\Debug\net9.0\Microsoft.SqlServer.Server.dll
 C:\Users\daniela.soares\RiderProjects\OnboardingSIGDB1\OnboardingSIGDB1.API\bin\Debug\net9.0\Microsoft.Win32.SystemEvents.dll
+C:\Users\daniela.soares\RiderProjects\OnboardingSIGDB1\OnboardingSIGDB1.API\bin\Debug\net9.0\Newtonsoft.Json.dll
 C:\Users\daniela.soares\RiderProjects\OnboardingSIGDB1\OnboardingSIGDB1.API\bin\Debug\net9.0\Swashbuckle.AspNetCore.Swagger.dll
 C:\Users\daniela.soares\RiderProjects\OnboardingSIGDB1\OnboardingSIGDB1.API\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\Users\daniela.soares\RiderProjects\OnboardingSIGDB1\OnboardingSIGDB1.API\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerUI.dll

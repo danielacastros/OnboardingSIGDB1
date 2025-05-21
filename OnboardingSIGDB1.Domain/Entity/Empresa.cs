@@ -1,5 +1,6 @@
 ﻿using System;
 using OnboardingSIGDB1.Domain.Dto;
+using OnboardingSIGDB1.Domain.Notifications.Validators;
 
 namespace OnboardingSIGDB1.Domain.Entity;
 
@@ -18,10 +19,13 @@ public class Empresa : Entidade
         Cnpj = cnpj;
         Nome = nome;
         DataFundacao = dataFundacao;
+
+        Validar(this, new EmpresaValidator());
     }
 
     public void AlterarCnpj(string cnpj)
     {
+        
         Cnpj = cnpj;
     }
 

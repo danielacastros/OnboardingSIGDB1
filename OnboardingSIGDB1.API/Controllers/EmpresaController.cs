@@ -9,18 +9,17 @@ namespace OnboardingSIGDB1.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class EmpresaController : ControllerBase
+public class EmpresaController : Controller
 {
     private readonly ArmazenadorDeEmpresa _armazenadorDeEmpresa;
     private readonly IRepositorio<Empresa> _empresaRepositorio;
-    
+
     public EmpresaController(ArmazenadorDeEmpresa armazenadorDeEmpresa, IRepositorio<Empresa> empresaRepositorio)
     {
         _armazenadorDeEmpresa = armazenadorDeEmpresa;
         _empresaRepositorio = empresaRepositorio;
     }
 
-    
     /// <summary>
     /// Cadastro de empresa.
     /// </summary>
