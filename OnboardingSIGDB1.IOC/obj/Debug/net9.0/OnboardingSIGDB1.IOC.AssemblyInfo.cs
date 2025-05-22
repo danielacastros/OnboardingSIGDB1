@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("OnboardingSIGDB1.IOC")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fdc0021560e0dc9524b7156dfec16a0d01c5f073")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1648757f9dcd04c6125924374ce597f8b45d6bec")]
 [assembly: System.Reflection.AssemblyProductAttribute("OnboardingSIGDB1.IOC")]
 [assembly: System.Reflection.AssemblyTitleAttribute("OnboardingSIGDB1.IOC")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -31,7 +31,7 @@ public class ArmazenadorDeEmpresa
                 return;
             }
             
-            _empresaRepositorio.Adicionar(empresa);
+            _empresaRepositorio.Adicionar(empresaSalvar);
         }else if (empresaExistente != null)
         {
             _notificationContext.AddNotification("Empresa", "Esse CNPJ já foi cadastrado.");

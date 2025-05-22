@@ -5,6 +5,7 @@ using OnboardingSIGDB1.Domain.Dto;
 using OnboardingSIGDB1.Domain.Entity;
 using OnboardingSIGDB1.Domain.Interfaces;
 using OnboardingSIGDB1.Domain.Services;
+using OnboardingSIGDB1.Domain.Utils;
 
 namespace OnboardingSIGDB1.API.Controllers;
 
@@ -38,7 +39,7 @@ public class EmpresaController : ControllerBase
         {
             Id = e.Id,
             Nome = e.Nome,
-            Cnpj = e.Cnpj,
+            Cnpj = CnpjHelper.FormatarCnpjFormatoPadrao(e.Cnpj),
             DataFundacao = e.DataFundacao.ToString("dd/MM/yyyy")
         });
 
