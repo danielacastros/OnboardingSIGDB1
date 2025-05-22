@@ -44,5 +44,7 @@ public class Empresa : Entidade
         Nome = empresaDto.Nome;
         Cnpj = empresaDto.Cnpj;
         DataFundacao = empresaDto.DataFundacao;
+        
+        Validar(this, new EmpresaValidator());
     }
 }

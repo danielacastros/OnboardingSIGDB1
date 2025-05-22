@@ -17,16 +17,20 @@ public class ArmazenadorDeEmpresa
     {
         var empresaExistente = _empresaRepositorio.BuscarPorCnpj(empresaDto.Cnpj);
 
-        if (empresaDto.Id == 0)
+        if (empresaDto.Id == 0 && empresaExistente == null)
         {
             var empresa = new Empresa(empresaDto.Cnpj, empresaDto.Nome, empresaDto.DataFundacao);
             _empresaRepositorio.Adicionar(empresa);
         }
-        else
-        {
-            var empresa = _empresaRepositorio.BuscarPorCnpj(empresaDto.Cnpj);
-            empresa.Alterar(empresaDto);
-            //_empresaRepositorio.Alterar(empresa);
-        }
+    }
+
+    public void Alterar(EmpresaDto empresaDto)
+    {
+        var empresa = _empresaRepositorio.BuscarPorCnpj(empresaDto.Cnpj);
+        if (empresa == null)
+            return;
+        
+        empresa.Alterar(empresaDto);
+        _empresaRepositorio.Alterar(empresa);
     }
 }

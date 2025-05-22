@@ -29,4 +29,15 @@ public class RepositorioBase<TEntidade> : IRepositorio<TEntidade> where TEntidad
         Context.Set<TEntidade>().Add(entity);
         Context.SaveChanges();
     }
+
+    public void Alterar(TEntidade entity)
+    {
+        Context.Set<TEntidade>().Update(entity);
+        Context.SaveChanges();
+    }
+
+    public void Remover(TEntidade entity)
+    {
+        Context.Set<TEntidade>().Remove(entity);
+    }
 }

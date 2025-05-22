@@ -21,14 +21,26 @@ public class EmpresaController : Controller
     }
 
     /// <summary>
-    /// Cadastro de empresa.
+    /// Cadastro dos dados de uma empresa.
     /// </summary>
-    /// <param name="dto"></param>
-    /// <returns></returns>
+    /// <param name="empresaDto"></param>
+    /// <returns>Retorna um status HTTP 200 (OK) se a operação for bem-sucedida.</returns>
     [HttpPost]
     public IActionResult Salvar(EmpresaDto empresaDto)
     {
         _armazenadorDeEmpresa.Armazenar(empresaDto);
+        return Ok();
+    }
+
+    /// <summary>
+    /// Altera os dados de uma empresa existente.
+    /// </summary>
+    /// <param name="empresaDto">Objeto contendo os dados atualizados da empresa.</param>
+    /// <returns>Retorna um status HTTP 200 (OK) se a operação for bem-sucedida.</returns>
+    [HttpPut]
+    public IActionResult Alterar(EmpresaDto empresaDto)
+    {
+        _armazenadorDeEmpresa.Alterar(empresaDto);
         return Ok();
     }
 }
