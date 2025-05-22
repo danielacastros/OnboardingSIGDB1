@@ -6,8 +6,6 @@ namespace OnboardingSIGDB1.Domain.Entity;
 
 public class Empresa : Entidade
 {
-    public int Id { get; private set; }
-
     public string Nome { get; private set; }
 
     public string Cnpj { get; private set; }
@@ -39,11 +37,11 @@ public class Empresa : Entidade
         DataFundacao = fundacao;
     }
 
-    public void Alterar(EmpresaDto empresaDto)
+    public void Alterar(Empresa empresa, string cnpjFormatado)
     {
-        Nome = empresaDto.Nome;
-        Cnpj = empresaDto.Cnpj;
-        DataFundacao = empresaDto.DataFundacao;
+        Nome = empresa.Nome;
+        Cnpj = cnpjFormatado;
+        DataFundacao = empresa.DataFundacao;
         
         Validar(this, new EmpresaValidator());
     }

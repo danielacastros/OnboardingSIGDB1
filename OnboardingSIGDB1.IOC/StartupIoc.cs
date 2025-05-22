@@ -14,8 +14,8 @@ namespace OnboardingSIGDB1.IOC
         public static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(configuration["Data Source=localhost\\SQLEXPRESS;Initial Catalog=OnboardingSIGDB1;Integrated Security=True;TrustServerCertificate=True;MultipleActiveResultSets=True"]));
-
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+            
             services.AddScoped(typeof(IRepositorio<>), typeof(RepositorioBase<>));
             services.AddScoped(typeof(IEmpresaRepositorio), typeof(EmpresaRepositorio));
             

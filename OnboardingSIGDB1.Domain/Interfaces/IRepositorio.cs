@@ -5,8 +5,8 @@ namespace OnboardingSIGDB1.Domain.Interfaces;
 public interface IRepositorio<TEntidade>
 {
     TEntidade ObterPorId(int id);
-    List<TEntidade> Consultar();
+    List<TEntidade> ObterTodas();
     void Adicionar(TEntidade entity);
     void Alterar(TEntidade entity);
-    void Remover(TEntidade entity);
+    void Excluir(TEntidade entity);
 }

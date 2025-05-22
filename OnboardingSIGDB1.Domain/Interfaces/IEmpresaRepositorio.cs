@@ -7,5 +7,4 @@ public interface IEmpresaRepositorio : IRepositorio<Empresa>
 {
     Empresa BuscarPorCnpj(string cnpj);
     Empresa BuscarPorIntervaloDataFundacao(DateTime fundacao);
-    
 }

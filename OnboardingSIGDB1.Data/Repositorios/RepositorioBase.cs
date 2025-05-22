@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using OnboardingSIGDB1.Data.Contextos;
 using OnboardingSIGDB1.Domain.Entity;
 using OnboardingSIGDB1.Domain.Interfaces;
@@ -16,14 +17,16 @@ public class RepositorioBase<TEntidade> : IRepositorio<TEntidade> where TEntidad
 
     public TEntidade ObterPorId(int id)
     {
-        throw new System.NotImplementedException();
+        return Context.Set<TEntidade>()
+            .FirstOrDefault(e => e.Id == id);
     }
 
-    public List<TEntidade> Consultar()
+    public List<TEntidade> ObterTodas()
     {
-        throw new System.NotImplementedException();
+        var entidades = Context.Set<TEntidade>().ToList();
+        return entidades.Any() ? entidades : new List<TEntidade>();
     }
-
+    
     public void Adicionar(TEntidade entity)
     {
         Context.Set<TEntidade>().Add(entity);
@@ -36,7 +39,7 @@ public class RepositorioBase<TEntidade> : IRepositorio<TEntidade> where TEntidad
         Context.SaveChanges();
     }
 
-    public void Remover(TEntidade entity)
+    public void Excluir(TEntidade entity)
     {
         Context.Set<TEntidade>().Remove(entity);
     }

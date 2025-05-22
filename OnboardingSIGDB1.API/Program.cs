@@ -1,3 +1,4 @@
+using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using OnboardingSIGDB1.Data.Contextos;
 using OnboardingSIGDB1.Domain.Notifications;
@@ -6,6 +7,7 @@ using OnboardingSIGDB1.IOC;
 var builder = WebApplication.CreateBuilder(args);
 
 StartupIoc.ConfigureServices(builder.Services, builder.Configuration);
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddControllers(options =>
 {
