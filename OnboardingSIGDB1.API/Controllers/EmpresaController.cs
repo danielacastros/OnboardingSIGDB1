@@ -26,13 +26,23 @@ public class EmpresaController : ControllerBase
     /// <summary>
     /// Busca todas as empresas cadastradas no banco de dados.
     /// </summary>
+    /// <param name="BuscarEmpresasDto"></param>
     /// <returns>IActionResult</returns>
     /// <response code="200">Caso inserção seja feita com sucesso</response>
     [HttpGet]
     public IActionResult ObterTodas()
     {
         var empresas = _empresaRepositorio.ObterTodas();
-        return Ok(empresas);
+        
+        var empresaDtos = empresas.Select(e => new BuscarEmpresasDto
+        {
+            Id = e.Id,
+            Nome = e.Nome,
+            Cnpj = e.Cnpj,
+            DataFundacao = e.DataFundacao.ToString("dd/MM/yyyy")
+        });
+
+        return Ok(empresaDtos);
     }
     
     /// <summary>
@@ -70,7 +80,7 @@ public class EmpresaController : ControllerBase
     /// <param name="id">Id da empresa.</param>
     /// <response code="200">Caso inserção seja feita com sucesso</response>
     [HttpDelete("{id}")]
-    public IActionResult Excluir([FromQuery] int id)
+    public IActionResult Excluir([FromRoute] int id)
     {
         _armazenadorDeEmpresa.Excluir(id);
         return Ok();

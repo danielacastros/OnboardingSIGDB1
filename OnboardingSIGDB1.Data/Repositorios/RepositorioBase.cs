@@ -42,5 +42,6 @@ public class RepositorioBase<TEntidade> : IRepositorio<TEntidade> where TEntidad
     public void Excluir(TEntidade entity)
     {
         Context.Set<TEntidade>().Remove(entity);
+        Context.SaveChanges();
     }
 }
