@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using OnboardingSIGDB1.Data.Contextos;
 using OnboardingSIGDB1.Domain.Entity;
 using OnboardingSIGDB1.Domain.Interfaces;
@@ -15,33 +17,33 @@ public class RepositorioBase<TEntidade> : IRepositorio<TEntidade> where TEntidad
         Context = context;
     }
 
-    public TEntidade ObterPorId(int id)
+    public async Task<TEntidade> ObterPorId(int id)
     {
-        return Context.Set<TEntidade>()
-            .FirstOrDefault(e => e.Id == id);
+        return await Context.Set<TEntidade>()
+            .FirstOrDefaultAsync(e => e.Id == id);
     }
 
-    public List<TEntidade> ObterTodas()
+    public async Task<List<TEntidade>> ObterTodas()
     {
-        var entidades = Context.Set<TEntidade>().ToList();
+        var entidades = await Context.Set<TEntidade>().ToListAsync();
         return entidades.Any() ? entidades : new List<TEntidade>();
     }
     
-    public void Adicionar(TEntidade entity)
+    public async Task Adicionar(TEntidade entity)
     {
         Context.Set<TEntidade>().Add(entity);
-        Context.SaveChanges();
+        await Context.SaveChangesAsync();
     }
 
-    public void Alterar(TEntidade entity)
+    public async Task Alterar(TEntidade entity)
     {
         Context.Set<TEntidade>().Update(entity);
-        Context.SaveChanges();
+        await Context.SaveChangesAsync();
     }
 
-    public void Excluir(TEntidade entity)
+    public async Task Excluir(TEntidade entity)
     {
         Context.Set<TEntidade>().Remove(entity);
-        Context.SaveChanges();
+        await Context.SaveChangesAsync();
     }
 }

@@ -10,5 +10,6 @@ public class EmpresaProfile : Profile
     {
         CreateMap<CriarEmpresaDto, Empresa>();
         CreateMap<AlterarEmpresaDto, Empresa>();
+        CreateMap<Empresa, BuscarEmpresasDto>();
     }
 }

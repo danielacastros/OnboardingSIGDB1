@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using OnboardingSIGDB1.Data.Contextos;
 using OnboardingSIGDB1.Domain.Entity;
@@ -15,15 +17,26 @@ public class EmpresaRepositorio : RepositorioBase<Empresa>, IEmpresaRepositorio
         
     }
 
-    public Empresa BuscarPorCnpj(string cnpj)
+    public async Task<Empresa> BuscarPorCnpj(string cnpj)
     {
-        return Context.Set<Empresa>()
+        return await Context.Set<Empresa>()
             .AsNoTracking()
-            .FirstOrDefault(e => e.Cnpj == cnpj);
+            .FirstOrDefaultAsync(e => e.Cnpj == cnpj);
     }
 
-    public Empresa BuscarPorIntervaloDataFundacao(DateTime fundacao)
+    public async Task<List<Empresa>> ObterTodasPorIntervaloDataFundacao(DateTime dataInicial, DateTime dataFinal)
     {
-        throw new NotImplementedException();
+        var empresas = await Context.Set<Empresa>()
+            .Where(e => e.DataFundacao >= dataInicial && e.DataFundacao <= dataFinal)
+            .ToListAsync();
+        return empresas.Any() ? empresas : new List<Empresa>();
+    }
+
+    public async Task<List<Empresa>> ObterEmpresaPeloNome(string nome)
+    {
+        List<Empresa> empresas = await Context.Set<Empresa>()
+            .Where(e => EF.Functions.Like(e.Nome, $"%{nome}%"))
+            .ToListAsync();
+        return empresas.Any() ? empresas : new List<Empresa>();
     }
 }

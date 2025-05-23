@@ -1,4 +1,5 @@
-﻿using OnboardingSIGDB1.Domain.Dto;
+﻿using System.Threading.Tasks;
+using OnboardingSIGDB1.Domain.Dto;
 using OnboardingSIGDB1.Domain.Entity;
 using OnboardingSIGDB1.Domain.Interfaces;
 using OnboardingSIGDB1.Domain.Notifications;
@@ -17,10 +18,10 @@ public class ArmazenadorDeEmpresa
         _notificationContext = notificationContext;
     }
 
-    public void Armazenar(Empresa empresa)
+    public async Task Armazenar(Empresa empresa)
     {
         var cnpjFormatado = CnpjHelper.FormatarCnpj(empresa.Cnpj);
-        var empresaExistente = _empresaRepositorio.BuscarPorCnpj(cnpjFormatado);
+        var empresaExistente = await _empresaRepositorio.BuscarPorCnpj(cnpjFormatado);
         
         if (empresaExistente == null)
         {
@@ -31,17 +32,17 @@ public class ArmazenadorDeEmpresa
                 return;
             }
             
-            _empresaRepositorio.Adicionar(empresaSalvar);
-        }else if (empresaExistente != null)
+            await _empresaRepositorio.Adicionar(empresaSalvar);
+        }else
         {
             _notificationContext.AddNotification("Empresa", "Esse CNPJ já foi cadastrado.");
         }
     }
 
-    public void Alterar(Empresa empresa)
+    public async Task Alterar(Empresa empresa)
     {
         var cnpjFormatado = CnpjHelper.FormatarCnpj(empresa.Cnpj);
-        var empresaAlterar = _empresaRepositorio.ObterPorId(empresa.Id);
+        var empresaAlterar = await _empresaRepositorio.ObterPorId(empresa.Id);
         
         if (empresaAlterar == null)
         {
@@ -50,20 +51,18 @@ public class ArmazenadorDeEmpresa
         else
         {
             empresaAlterar.Alterar(empresa, cnpjFormatado);
-            _empresaRepositorio.Alterar(empresaAlterar);
+            await _empresaRepositorio.Alterar(empresaAlterar);
         }
     }
 
-    public void Excluir(int id)
+    public async Task Excluir(int id)
     {
-        var empresa = _empresaRepositorio.ObterPorId(id);
+        var empresa = await _empresaRepositorio.ObterPorId(id);
+        
         if (empresa == null)
-        {
             _notificationContext.AddNotification("Empresa", "Erro ao excluir. Empresa não encontrada.");
-        }
         else
-        {
-            _empresaRepositorio.Excluir(empresa);
-        }
+            await _empresaRepositorio.Excluir(empresa);
+        
     }
 }
