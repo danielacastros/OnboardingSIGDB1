@@ -4,7 +4,7 @@ using OnboardingSIGDB1.Domain.Entity;
 
 namespace OnboardingSIGDB1.Data.Mappings;
 
-public class EmpresaMap : IEntityTypeConfiguration<Empresa>
+public class EmpresaMapping : IEntityTypeConfiguration<Empresa>
 {
     public void Configure(EntityTypeBuilder<Empresa> builder)
     {
