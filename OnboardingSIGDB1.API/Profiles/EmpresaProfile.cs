@@ -8,7 +8,7 @@ public class EmpresaProfile : Profile
 {
     public EmpresaProfile()
     {
-        CreateMap<CriarEmpresaDto, Empresa>();
+        CreateMap<EmpresaDto, Empresa>();
         CreateMap<AlterarEmpresaDto, Empresa>();
         CreateMap<Empresa, BuscarEmpresasDto>();
     }

@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using OnboardingSIGDB1.Domain.Base;
 using OnboardingSIGDB1.Domain.Dto;
 using OnboardingSIGDB1.Domain.Entity;
 using OnboardingSIGDB1.Domain.Interfaces;
+using OnboardingSIGDB1.Domain.Notifications;
 using OnboardingSIGDB1.Domain.Services;
 using OnboardingSIGDB1.Domain.Utils;
 
@@ -15,12 +17,17 @@ public class EmpresaController : ControllerBase
 {
     private readonly ArmazenadorDeEmpresa _armazenadorDeEmpresa;
     private readonly IEmpresaRepositorio _empresaRepositorio;
+    private readonly NotificationContext _notificationContext;
     private IMapper _mapper;
 
-    public EmpresaController(ArmazenadorDeEmpresa armazenadorDeEmpresa, IEmpresaRepositorio empresaRepositorio, IMapper mapper)
+    public EmpresaController(ArmazenadorDeEmpresa armazenadorDeEmpresa, 
+        IEmpresaRepositorio empresaRepositorio, 
+        NotificationContext notificationContext, 
+        IMapper mapper)
     {
         _armazenadorDeEmpresa = armazenadorDeEmpresa;
         _empresaRepositorio = empresaRepositorio;
+        _notificationContext = notificationContext;
         _mapper = mapper;
     }
 
@@ -31,7 +38,7 @@ public class EmpresaController : ControllerBase
     /// <returns>IActionResult</returns>
     /// <response code="200">Caso inserção seja feita com sucesso</response>
     [HttpGet]
-    public async Task<IActionResult> ObterTodas()
+    public async Task<IActionResult> Get()
     {
         var empresas = await _empresaRepositorio.ObterTodas();
         
@@ -54,7 +61,7 @@ public class EmpresaController : ControllerBase
     /// <returns>Lista de empresas no formato BuscarEmpresasDto</returns>
     /// <response code="200">Caso consulta seja feita com sucesso</response>
     [HttpGet("intervalo")]
-    public async Task<IActionResult> ObterPorIntervaloDeDataFundacao([FromQuery] DateTime dataInicial, [FromQuery] DateTime dataFinal)
+    public async Task<IActionResult> Get([FromQuery] DateTime dataInicial, [FromQuery] DateTime dataFinal)
     {
         List<Empresa> empresas;
         
@@ -72,11 +79,40 @@ public class EmpresaController : ControllerBase
         }).ToList();
             
         return Ok(listaDeEmpresasRetornada);
+    }
+    
+    /// <summary>
+    /// Busca todas as empresas cadastradas com fundação dentro do intervalo de datas informadas.
+    /// </summary>
+    /// <param name="dataInicial">Data inicial</param>
+    /// <param name="dataFinal">Data final</param>
+    /// <returns>Lista de empresas no formato BuscarEmpresasDto</returns>
+    /// <response code="200">Caso consulta seja feita com sucesso</response>
+    [HttpGet("intervalo-datas")]
+    public async Task<ResultadoDaConsultaBase> Get([FromQuery] EmpresaFiltro filtro)
+    {
+        List<Empresa> empresas = await _empresaRepositorio.ObterTodasPorIntervaloDataFundacao(filtro.DataInicial, filtro.DataFinal);
         
+        var listaDeEmpresasRetornada = empresas.Select(e => new BuscarEmpresasDto
+        {
+            Id = e.Id,
+            Nome = e.Nome,
+            Cnpj = CnpjHelper.FormatarCnpjFormatoPadrao(e.Cnpj),
+            DataFundacao = e.DataFundacao.ToString("dd/MM/yyyy")
+        }).ToList();
+            
+        return new ResultadoDaConsultaBase(){Lista = listaDeEmpresasRetornada, Total = listaDeEmpresasRetornada.Count};
     }
 
+    [HttpGet("{id}")]
+    public async Task<IActionResult> Get(int id)
+    {
+        var empresa = await _empresaRepositorio.ObterPorId(id);
+        return Ok(empresa);
+    }
+    
     [HttpGet("pesquisar")]
-    public async Task<IActionResult> ObterEmpresaPorNome([FromQuery] string? nome)
+    public async Task<IActionResult> Get([FromQuery] string? nome)
     {
         List<Empresa> empresas;
         if (nome == null)
@@ -102,10 +138,15 @@ public class EmpresaController : ControllerBase
     /// <returns>IActionResult</returns>
     /// <response code="201">Caso inserção seja feita com sucesso</response>
     [HttpPost]
-    public async Task<IActionResult> Salvar([FromBody] CriarEmpresaDto criarEmpresaDto)
+    public async Task<IActionResult> Post([FromBody] EmpresaDto empresaDto)
     {
-        Empresa empresa = _mapper.Map<Empresa>(criarEmpresaDto);
-        await _armazenadorDeEmpresa.Armazenar(empresa);
+        if (empresaDto == null)
+        {
+            _notificationContext.AddNotification(Resource.KeyEmpresa, Resource.DadosEmpresaNaoFornecidos);
+            return BadRequest(_notificationContext);
+        }
+        
+        await _armazenadorDeEmpresa.Armazenar(empresaDto);
         return Ok();
     }
 
@@ -116,11 +157,15 @@ public class EmpresaController : ControllerBase
     /// <returns>IActionResult</returns>
     /// <response code="204">Caso inserção seja feita com sucesso</response>
     [HttpPut("{id}")]
-    public async Task<IActionResult> Alterar(int id, [FromBody] AlterarEmpresaDto alterarEmpresaDto)
+    public async Task<IActionResult> Put(int id, [FromBody] AlterarEmpresaDto alterarEmpresaDto)
     {
-        var empresa = _mapper.Map<Empresa>(alterarEmpresaDto);
-        await _armazenadorDeEmpresa.Alterar(empresa);
-        
+        if (alterarEmpresaDto == null)
+        {
+            _notificationContext.AddNotification(Resource.KeyEmpresa, Resource.DadosEmpresaNaoFornecidos);
+            return BadRequest(_notificationContext);
+        }
+            
+        await _armazenadorDeEmpresa.Alterar(id, alterarEmpresaDto);
         return Ok();
     }
 
@@ -130,7 +175,7 @@ public class EmpresaController : ControllerBase
     /// <param name="id">Id da empresa.</param>
     /// <response code="200">Caso inserção seja feita com sucesso</response>
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Excluir(int id)
+    public async Task<IActionResult> Delete(int id)
     {
         await _armazenadorDeEmpresa.Excluir(id);
         return Ok();

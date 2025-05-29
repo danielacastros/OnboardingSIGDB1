@@ -9,8 +9,6 @@ C:\Users\daniela.soares\RiderProjects\OnboardingSIGDB1\OnboardingSIGDB1.Domain\b
 C:\Users\daniela.soares\RiderProjects\OnboardingSIGDB1\OnboardingSIGDB1.Domain\bin\Debug\net9.0\OnboardingSIGDB1.Domain.pdb
 C:\Users\daniela.soares\RiderProjects\OnboardingSIGDB1\OnboardingSIGDB1.Domain\bin\Debug\net9.0\Microsoft.AspNetCore.Mvc.Abstractions.dll
 C:\Users\daniela.soares\RiderProjects\OnboardingSIGDB1\OnboardingSIGDB1.Domain\bin\Debug\net9.0\Microsoft.AspNetCore.Routing.Abstractions.dll
-C:\Users\daniela.soares\RiderProjects\OnboardingSIGDB1\OnboardingSIGDB1.Domain\bin\Debug\net9.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
-C:\Users\daniela.soares\RiderProjects\OnboardingSIGDB1\OnboardingSIGDB1.Domain\bin\Debug\net9.0\Microsoft.Extensions.Primitives.dll
 C:\Users\daniela.soares\RiderProjects\OnboardingSIGDB1\OnboardingSIGDB1.Domain\bin\Debug\net9.0\Microsoft.Extensions.Features.dll
 C:\Users\daniela.soares\RiderProjects\OnboardingSIGDB1\OnboardingSIGDB1.Domain\bin\Debug\net9.0\Microsoft.AspNetCore.Http.Features.dll
 C:\Users\daniela.soares\RiderProjects\OnboardingSIGDB1\OnboardingSIGDB1.Domain\bin\Debug\net9.0\Microsoft.Net.Http.Headers.dll

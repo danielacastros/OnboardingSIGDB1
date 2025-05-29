@@ -1,6 +1,7 @@
 ﻿using System;
 using OnboardingSIGDB1.Domain.Dto;
 using OnboardingSIGDB1.Domain.Notifications.Validators;
+using OnboardingSIGDB1.Domain.Utils;
 
 namespace OnboardingSIGDB1.Domain.Entity;
 
@@ -14,7 +15,7 @@ public class Empresa : Entidade
 
     public Empresa(string cnpj, string nome, DateTime dataFundacao)
     {
-        Cnpj = cnpj;
+        Cnpj =  CnpjHelper.FormatarCnpj(cnpj);
         Nome = nome;
         DataFundacao = dataFundacao;
 
@@ -23,7 +24,6 @@ public class Empresa : Entidade
 
     public void AlterarCnpj(string cnpj)
     {
-        
         Cnpj = cnpj;
     }
 
@@ -37,10 +37,10 @@ public class Empresa : Entidade
         DataFundacao = fundacao;
     }
 
-    public void Alterar(Empresa empresa, string cnpjFormatado)
+    public void Alterar(Empresa empresa)
     {
         Nome = empresa.Nome;
-        Cnpj = cnpjFormatado;
+        Cnpj = CnpjHelper.FormatarCnpj(empresa.Cnpj);
         DataFundacao = empresa.DataFundacao;
         
         Validar(this, new EmpresaValidator());

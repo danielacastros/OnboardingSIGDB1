@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 using FluentValidation;
+using OnboardingSIGDB1.Domain.Base;
 using OnboardingSIGDB1.Domain.Entity;
 
 namespace OnboardingSIGDB1.Domain.Notifications.Validators;
@@ -12,18 +13,18 @@ public class EmpresaValidator : AbstractValidator<Empresa>
         RuleFor(e => e.Nome)
             .NotEmpty()
             .MaximumLength(150)
-            .WithMessage("Nome inválido.");
+            .WithMessage(Resource.NomeInvalido);
 
         RuleFor(e => e.Cnpj)
             .NotEmpty()
             .MaximumLength(14)
             .Must(ValidarCnpj)
-            .WithMessage("CNPJ inválido.");
+            .WithMessage(Resource.CnpjInvalido);
 
         RuleFor(e => e.DataFundacao)
             .NotEmpty()
             .GreaterThan(DateTime.MinValue)
-            .WithMessage("Data inválida.");
+            .WithMessage(Resource.DataInvalida);
     }
     
     private bool ValidarCnpj(string cnpj)

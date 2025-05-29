@@ -2,7 +2,7 @@
 
 namespace OnboardingSIGDB1.Domain.Dto;
 
-public class CriarEmpresaDto
+public class EmpresaDto
 {
     public string Nome { get; set; }
 
