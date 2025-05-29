@@ -1,4 +1,6 @@
 ﻿using System.Threading.Tasks;
+using AutoMapper;
+using OnboardingSIGDB1.Domain.Base;
 using OnboardingSIGDB1.Domain.Dto;
 using OnboardingSIGDB1.Domain.Entity;
 using OnboardingSIGDB1.Domain.Interfaces;
@@ -11,46 +13,51 @@ public class ArmazenadorDeEmpresa
 {
     private readonly IEmpresaRepositorio _empresaRepositorio;
     private readonly NotificationContext _notificationContext;
+    private readonly IMapper _mapper;
 
-    public ArmazenadorDeEmpresa(IEmpresaRepositorio empresaRepositorio, NotificationContext notificationContext)
+    public ArmazenadorDeEmpresa(IEmpresaRepositorio empresaRepositorio, 
+        NotificationContext notificationContext, 
+        IMapper mapper)
     {
         _empresaRepositorio = empresaRepositorio;
         _notificationContext = notificationContext;
+        _mapper = mapper;
     }
 
-    public async Task Armazenar(Empresa empresa)
+    public async Task Armazenar(EmpresaDto empresaDto)
     {
-        var cnpjFormatado = CnpjHelper.FormatarCnpj(empresa.Cnpj);
+        var cnpjFormatado = CnpjHelper.FormatarCnpj(empresaDto.Cnpj);
         var empresaExistente = await _empresaRepositorio.BuscarPorCnpj(cnpjFormatado);
         
         if (empresaExistente == null)
         {
-            var empresaSalvar = new Empresa(cnpjFormatado, empresa.Nome, empresa.DataFundacao);
-            if (empresaSalvar.Invalid)
+            Empresa empresa = _mapper.Map<Empresa>(empresaDto);
+            
+            if (empresa.Invalid)
             {
-                _notificationContext.AddNotifications(empresaSalvar.ValidationResult);
+                _notificationContext.AddNotifications(empresa.ValidationResult);
                 return;
             }
             
-            await _empresaRepositorio.Adicionar(empresaSalvar);
+            await _empresaRepositorio.Adicionar(empresa);
         }else
         {
-            _notificationContext.AddNotification("Empresa", "Esse CNPJ já foi cadastrado.");
+            _notificationContext.AddNotification(Resource.KeyEmpresa, Resource.CnpjCadastrado );
         }
     }
 
-    public async Task Alterar(Empresa empresa)
+    public async Task Alterar(int id, AlterarEmpresaDto alterarEmpresaDto)
     {
-        var cnpjFormatado = CnpjHelper.FormatarCnpj(empresa.Cnpj);
-        var empresaAlterar = await _empresaRepositorio.ObterPorId(empresa.Id);
+        var empresaAlterar = await _empresaRepositorio.ObterPorId(id);
         
         if (empresaAlterar == null)
         {
-            _notificationContext.AddNotification("Empresa", "O CNPJ não foi encontrado.");
+            _notificationContext.AddNotification(Resource.KeyEmpresa, Resource.EmpresaNaoEncontrada);
         }
         else
         {
-            empresaAlterar.Alterar(empresa, cnpjFormatado);
+            Empresa empresa = _mapper.Map<Empresa>(alterarEmpresaDto);
+            empresaAlterar.Alterar(empresa);
             await _empresaRepositorio.Alterar(empresaAlterar);
         }
     }
@@ -60,7 +67,7 @@ public class ArmazenadorDeEmpresa
         var empresa = await _empresaRepositorio.ObterPorId(id);
         
         if (empresa == null)
-            _notificationContext.AddNotification("Empresa", "Erro ao excluir. Empresa não encontrada.");
+            _notificationContext.AddNotification(Resource.KeyEmpresa, Resource.EmpresaNaoEncontrada);
         else
             await _empresaRepositorio.Excluir(empresa);
         
