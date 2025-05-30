@@ -1,7 +1,9 @@
-﻿using Bogus;
+﻿using AutoMapper;
+using Bogus;
 using Bogus.Extensions.Brazil;
 using Moq;
 using OnboardingSIGDB1.Domain.Dto;
+using OnboardingSIGDB1.Domain.Entity;
 using OnboardingSIGDB1.Domain.Interfaces;
 using OnboardingSIGDB1.Domain.Notifications;
 using OnboardingSIGDB1.Domain.Services;
@@ -15,6 +17,7 @@ public class ArmazenadorDeEmpresaTests
     private readonly Mock<IEmpresaRepositorio> _empresaRepositorioMock;
     private readonly ArmazenadorDeEmpresa _armazenadorDeEmpresa;
     private readonly NotificationContext _notificationContext;
+    private readonly Mock<IMapper> _mapperMock;
 
     public ArmazenadorDeEmpresaTests()
     {
@@ -27,12 +30,17 @@ public class ArmazenadorDeEmpresaTests
         };
         _empresaRepositorioMock = new Mock<IEmpresaRepositorio>();
         _notificationContext = new NotificationContext();
-        _armazenadorDeEmpresa = new ArmazenadorDeEmpresa(_empresaRepositorioMock.Object, _notificationContext);
+        _armazenadorDeEmpresa = new ArmazenadorDeEmpresa(_empresaRepositorioMock.Object, _notificationContext, _mapperMock.Object);
     }
     
     [Fact]
     public void QuandoDadosValidos_DeveArmazenarEmpresa()
     {
         _armazenadorDeEmpresa.Armazenar(_empresaDto);
+        _mapperMock
+        _empresaRepositorioMock.Verify(r => r.Adicionar(
+            It.Is<Empresa>(e => e.Nome == _empresaDto.Nome && 
+                                e.Cnpj == _empresaDto.Cnpj && 
+                                e.DataFundacao == _empresaDto.DataFundacao)));
     }
 }

@@ -220,6 +220,10 @@
               "target": "Package",
               "version": "[35.6.3, )"
             },
+            "ExpectedObjects": {
+              "target": "Package",
+              "version": "[3.5.4, )"
+            },
             "Microsoft.NET.Test.Sdk": {
               "target": "Package",
               "version": "[17.12.0, )"
