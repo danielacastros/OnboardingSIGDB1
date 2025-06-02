@@ -10,4 +10,6 @@ public static class Resource
     public static string DataInvalida = "Data inválida.";
     public static string EmpresaNaoEncontrada = "Erro ao excluir. Empresa não encontrada.";
     public static string DadosEmpresaNaoFornecidos = "Dados da empresa não fornecidos.";
+    public static string DadosInvalidos = "Dados inválidos.";
+    
 }

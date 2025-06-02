@@ -12,11 +12,11 @@ namespace OnboardingSIGDB1.Domain.Services;
 public class ArmazenadorDeEmpresa  
 {
     private readonly IEmpresaRepositorio _empresaRepositorio;
-    private readonly NotificationContext _notificationContext;
+    private readonly INotificationContext _notificationContext;
     private readonly IMapper _mapper;
 
     public ArmazenadorDeEmpresa(IEmpresaRepositorio empresaRepositorio, 
-        NotificationContext notificationContext, 
+        INotificationContext notificationContext, 
         IMapper mapper)
     {
         _empresaRepositorio = empresaRepositorio;
@@ -35,14 +35,14 @@ public class ArmazenadorDeEmpresa
             
             if (empresa.Invalid)
             {
-                _notificationContext.AddNotifications(empresa.ValidationResult);
+                _notificationContext.AddNotification(Resource.KeyEmpresa, Resource.DadosInvalidos);
                 return;
             }
             
             await _empresaRepositorio.Adicionar(empresa);
         }else
         {
-            _notificationContext.AddNotification(Resource.KeyEmpresa, Resource.CnpjCadastrado );
+            _notificationContext.AddNotification(Resource.KeyEmpresa, Resource.CnpjCadastrado);
         }
     }
 

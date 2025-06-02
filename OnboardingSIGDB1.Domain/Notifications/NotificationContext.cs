@@ -3,10 +3,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using FluentValidation.Results;
+using OnboardingSIGDB1.Domain.Interfaces;
 
 namespace OnboardingSIGDB1.Domain.Notifications;
 
-public class NotificationContext
+public class NotificationContext : INotificationContext
 {
     private readonly List<Notification> _notifications;
     public IReadOnlyCollection<Notification> Notifications => _notifications;
