@@ -17,12 +17,12 @@ public class EmpresaController : ControllerBase
 {
     private readonly ArmazenadorDeEmpresa _armazenadorDeEmpresa;
     private readonly IEmpresaRepositorio _empresaRepositorio;
-    private readonly NotificationContext _notificationContext;
+    private readonly INotificationContext _notificationContext;
     private IMapper _mapper;
 
     public EmpresaController(ArmazenadorDeEmpresa armazenadorDeEmpresa, 
         IEmpresaRepositorio empresaRepositorio, 
-        NotificationContext notificationContext, 
+        INotificationContext notificationContext, 
         IMapper mapper)
     {
         _armazenadorDeEmpresa = armazenadorDeEmpresa;
@@ -91,7 +91,12 @@ public class EmpresaController : ControllerBase
     [HttpGet("intervalo-datas")]
     public async Task<ResultadoDaConsultaBase> Get([FromQuery] EmpresaFiltro filtro)
     {
-        List<Empresa> empresas = await _empresaRepositorio.ObterTodasPorIntervaloDataFundacao(filtro.DataInicial, filtro.DataFinal);
+        List<Empresa> empresas;
+        
+        if (filtro.DataInicial != DateTime.MinValue && filtro.DataFinal != DateTime.MinValue)
+            empresas = await _empresaRepositorio.ObterTodasPorIntervaloDataFundacao(filtro.DataInicial, filtro.DataFinal);
+        else 
+            empresas = await _empresaRepositorio.ObterTodas();
         
         var listaDeEmpresasRetornada = empresas.Select(e => new BuscarEmpresasDto
         {
@@ -147,6 +152,12 @@ public class EmpresaController : ControllerBase
         }
         
         await _armazenadorDeEmpresa.Armazenar(empresaDto);
+        
+        if (_notificationContext.HasNotifications)
+        {
+            return BadRequest(_notificationContext.Notifications);
+        }
+        
         return Ok();
     }
 
@@ -164,8 +175,12 @@ public class EmpresaController : ControllerBase
             _notificationContext.AddNotification(Resource.KeyEmpresa, Resource.DadosEmpresaNaoFornecidos);
             return BadRequest(_notificationContext);
         }
-            
+        
         await _armazenadorDeEmpresa.Alterar(id, alterarEmpresaDto);
+        
+        if (_notificationContext.HasNotifications)
+            return BadRequest(_notificationContext.Notifications);
+        
         return Ok();
     }
 

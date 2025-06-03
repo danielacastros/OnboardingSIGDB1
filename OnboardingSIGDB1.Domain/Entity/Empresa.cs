@@ -24,17 +24,20 @@ public class Empresa : Entidade
 
     public void AlterarCnpj(string cnpj)
     {
-        Cnpj = cnpj;
+        Cnpj = CnpjHelper.FormatarCnpj(cnpj);
+        Validar(this, new EmpresaValidator());
     }
 
     public void AlterarNome(string nome)
     {
         Nome = nome;
+        Validar(this, new EmpresaValidator());
     }
 
     public void AlterarDataFundacao(DateTime fundacao)
     {
         DataFundacao = fundacao;
+        Validar(this, new EmpresaValidator());
     }
 
     public void Alterar(Empresa empresa)

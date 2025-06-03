@@ -12,14 +12,12 @@ public class EmpresaValidator : AbstractValidator<Empresa>
     {
         RuleFor(e => e.Nome)
             .NotEmpty()
-            .MaximumLength(150)
-            .WithMessage(Resource.NomeInvalido);
+            .MaximumLength(150);
 
         RuleFor(e => e.Cnpj)
             .NotEmpty()
             .MaximumLength(14)
-            .Must(ValidarCnpj)
-            .WithMessage(Resource.CnpjInvalido);
+            .Must(ValidarCnpj);
 
         RuleFor(e => e.DataFundacao)
             .NotEmpty()

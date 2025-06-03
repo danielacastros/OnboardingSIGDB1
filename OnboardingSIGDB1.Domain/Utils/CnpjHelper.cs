@@ -7,6 +7,9 @@ public class CnpjHelper
 {
     public static string FormatarCnpj(string cnpj)
     {
+        if (string.IsNullOrWhiteSpace(cnpj))
+            return cnpj;
+        
         return cnpj.Replace(".", "").Replace("-", "").Replace("/", "");
     }
     

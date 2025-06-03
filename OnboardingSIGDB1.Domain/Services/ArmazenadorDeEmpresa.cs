@@ -4,9 +4,7 @@ using OnboardingSIGDB1.Domain.Base;
 using OnboardingSIGDB1.Domain.Dto;
 using OnboardingSIGDB1.Domain.Entity;
 using OnboardingSIGDB1.Domain.Interfaces;
-using OnboardingSIGDB1.Domain.Notifications;
 using OnboardingSIGDB1.Domain.Utils;
-
 namespace OnboardingSIGDB1.Domain.Services;
 
 public class ArmazenadorDeEmpresa  
@@ -27,49 +25,72 @@ public class ArmazenadorDeEmpresa
     public async Task Armazenar(EmpresaDto empresaDto)
     {
         var cnpjFormatado = CnpjHelper.FormatarCnpj(empresaDto.Cnpj);
-        var empresaExistente = await _empresaRepositorio.BuscarPorCnpj(cnpjFormatado);
-        
-        if (empresaExistente == null)
+        if (string.IsNullOrEmpty(cnpjFormatado))
         {
-            Empresa empresa = _mapper.Map<Empresa>(empresaDto);
-            
-            if (empresa.Invalid)
-            {
-                _notificationContext.AddNotification(Resource.KeyEmpresa, Resource.DadosInvalidos);
-                return;
-            }
-            
-            await _empresaRepositorio.Adicionar(empresa);
-        }else
+            _notificationContext.AddNotification(Resource.KeyEmpresa, Resource.CnpjInvalido);
+            return;
+        }
+        
+        var empresaExistente = await _empresaRepositorio.BuscarPorCnpj(cnpjFormatado);
+
+        if (empresaExistente != null)
         {
             _notificationContext.AddNotification(Resource.KeyEmpresa, Resource.CnpjCadastrado);
+            return;
         }
+        
+        Empresa empresa = _mapper.Map<Empresa>(empresaDto);
+        
+        if (empresa == null || empresa.Invalid)
+        {
+            foreach (var erro in empresa.ValidationResult.Errors)
+            {
+                _notificationContext.AddNotification(erro.PropertyName, erro.ErrorMessage);
+            }
+            
+            return;
+        }
+        
+        await _empresaRepositorio.Adicionar(empresa);
     }
 
     public async Task Alterar(int id, AlterarEmpresaDto alterarEmpresaDto)
     {
-        var empresaAlterar = await _empresaRepositorio.ObterPorId(id);
+        var empresa = await _empresaRepositorio.ObterPorId(id);
         
-        if (empresaAlterar == null)
+        if (empresa == null)
         {
             _notificationContext.AddNotification(Resource.KeyEmpresa, Resource.EmpresaNaoEncontrada);
+            return;
         }
-        else
+            
+        empresa.AlterarNome(alterarEmpresaDto.Nome);
+        empresa.AlterarCnpj(alterarEmpresaDto.Cnpj);
+        empresa.AlterarDataFundacao(alterarEmpresaDto.DataFundacao);
+        
+        if (empresa == null || empresa.Invalid)
         {
-            Empresa empresa = _mapper.Map<Empresa>(alterarEmpresaDto);
-            empresaAlterar.Alterar(empresa);
-            await _empresaRepositorio.Alterar(empresaAlterar);
+            foreach (var error in empresa.ValidationResult.Errors)
+            {
+                _notificationContext.AddNotification(error.PropertyName, error.ErrorMessage);
+            }
+
+            return;
         }
+        
+        await _empresaRepositorio.Alterar(empresa);
     }
 
     public async Task Excluir(int id)
     {
         var empresa = await _empresaRepositorio.ObterPorId(id);
-        
+
         if (empresa == null)
+        {
             _notificationContext.AddNotification(Resource.KeyEmpresa, Resource.EmpresaNaoEncontrada);
-        else
-            await _empresaRepositorio.Excluir(empresa);
+            return;
+        }
         
+        await _empresaRepositorio.Excluir(empresa);
     }
 }

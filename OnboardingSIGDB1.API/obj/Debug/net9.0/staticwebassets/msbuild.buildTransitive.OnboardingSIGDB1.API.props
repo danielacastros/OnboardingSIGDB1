@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\buildMultiTargeting\OnboardingSIGDB1.API.props" />
-</Project>

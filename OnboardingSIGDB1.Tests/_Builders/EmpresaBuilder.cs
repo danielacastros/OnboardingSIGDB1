@@ -1,13 +1,25 @@
-﻿using OnboardingSIGDB1.Domain.Entity;
+﻿using Bogus;
+using Bogus.Extensions.Brazil;
+using OnboardingSIGDB1.Domain.Entity;
 
 namespace OnboardingSIGDB1.Tests._Builders;
 
 public class EmpresaBuilder
 {
+    private Faker _faker;
     private string _nome;
     private string _cnpj;
     private DateTime _dataFundacao;
     private int _id;
+
+    public EmpresaBuilder()
+    {
+        _faker = new Faker();
+        
+        _nome = _faker.Company.CompanyName();
+        _cnpj = _faker.Company.Cnpj();
+        _dataFundacao = _faker.Date.Past(15, DateTime.Now);
+    }
     
     public static EmpresaBuilder Nova()
     {
@@ -40,7 +52,7 @@ public class EmpresaBuilder
 
     public Empresa Build()
     {
-        var empresa = new Empresa(_nome, _cnpj, _dataFundacao);
+        var empresa = new Empresa(_cnpj, _nome, _dataFundacao);
 
         if (_id > 0)
         {
