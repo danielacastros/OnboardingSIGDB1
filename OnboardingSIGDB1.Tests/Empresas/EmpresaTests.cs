@@ -1,23 +1,11 @@
-﻿using Bogus;
-using ExpectedObjects;
-using Moq;
-using OnboardingSIGDB1.Domain.Base;
-using OnboardingSIGDB1.Domain.Entity;
+﻿using Moq;
 using OnboardingSIGDB1.Domain.Interfaces;
-using OnboardingSIGDB1.Domain.Notifications;
 using OnboardingSIGDB1.Tests._Builders;
 
 namespace OnboardingSIGDB1.Tests.Empresas;
 
 public class EmpresaTests
 {
-    private readonly Mock<INotificationContext> _notificationContextMock;
-
-    public EmpresaTests()
-    {
-        _notificationContextMock = new Mock<INotificationContext>();
-    }
-    
     [Theory]
     [InlineData("")]
     [InlineData(null)]

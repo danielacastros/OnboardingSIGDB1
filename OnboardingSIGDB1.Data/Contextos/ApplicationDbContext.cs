@@ -7,6 +7,7 @@ namespace OnboardingSIGDB1.Data.Contextos;
 public class ApplicationDbContext : DbContext
 {
     public DbSet<Empresa> Empresas { get; set; }
+    public DbSet<Funcionario> Funcionarios { get; set; }
     
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {

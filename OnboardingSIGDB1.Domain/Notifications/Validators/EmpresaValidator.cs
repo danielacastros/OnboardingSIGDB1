@@ -20,7 +20,6 @@ public class EmpresaValidator : AbstractValidator<Empresa>
             .Must(ValidarCnpj);
 
         RuleFor(e => e.DataFundacao)
-            .NotEmpty()
             .GreaterThan(DateTime.MinValue)
             .WithMessage(Resource.DataInvalida);
     }

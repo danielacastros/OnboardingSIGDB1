@@ -1,5 +1,5 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Http.HttpResults;
+﻿
+
 using Microsoft.AspNetCore.Mvc;
 using OnboardingSIGDB1.Domain.Base;
 using OnboardingSIGDB1.Domain.Dto;
@@ -18,17 +18,15 @@ public class EmpresaController : ControllerBase
     private readonly ArmazenadorDeEmpresa _armazenadorDeEmpresa;
     private readonly IEmpresaRepositorio _empresaRepositorio;
     private readonly INotificationContext _notificationContext;
-    private IMapper _mapper;
 
     public EmpresaController(ArmazenadorDeEmpresa armazenadorDeEmpresa, 
         IEmpresaRepositorio empresaRepositorio, 
-        INotificationContext notificationContext, 
-        IMapper mapper)
+        INotificationContext notificationContext)
     {
         _armazenadorDeEmpresa = armazenadorDeEmpresa;
         _empresaRepositorio = empresaRepositorio;
         _notificationContext = notificationContext;
-        _mapper = mapper;
+        
     }
 
     /// <summary>
@@ -147,7 +145,7 @@ public class EmpresaController : ControllerBase
     {
         if (empresaDto == null)
         {
-            _notificationContext.AddNotification(Resource.KeyEmpresa, Resource.DadosEmpresaNaoFornecidos);
+            _notificationContext.AddNotification(Resource.KeyEmpresa, Resource.DadosNaoFornecidos);
             return BadRequest(_notificationContext);
         }
         
@@ -172,7 +170,7 @@ public class EmpresaController : ControllerBase
     {
         if (alterarEmpresaDto == null)
         {
-            _notificationContext.AddNotification(Resource.KeyEmpresa, Resource.DadosEmpresaNaoFornecidos);
+            _notificationContext.AddNotification(Resource.KeyEmpresa, Resource.DadosNaoFornecidos);
             return BadRequest(_notificationContext);
         }
         

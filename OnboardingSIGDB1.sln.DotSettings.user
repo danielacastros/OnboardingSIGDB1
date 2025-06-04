@@ -49,6 +49,8 @@
     &lt;TestId&gt;xUnit::F75E9DE0-0E52-4D35-8A2B-09C5D5441ADA::net9.0::OnboardingSIGDB1.Tests.Empresas.EmpresaTests.NaoDeveEmpresaTerUmNomeInvalido&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;xUnit::F75E9DE0-0E52-4D35-8A2B-09C5D5441ADA::net9.0::OnboardingSIGDB1.Tests.Empresas.EmpresaTests.NaoDeveEmpresaTerUmCnpjInvalido&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;xUnit::F75E9DE0-0E52-4D35-8A2B-09C5D5441ADA::net9.0::OnboardingSIGDB1.Tests.Empresas.EmpresaTests.NaoDeveEmpresaTerUmCnpjNuloOuVazio&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::F75E9DE0-0E52-4D35-8A2B-09C5D5441ADA::net9.0::OnboardingSIGDB1.Tests.Funcionarios.FuncionarioTests&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::F75E9DE0-0E52-4D35-8A2B-09C5D5441ADA::net9.0::OnboardingSIGDB1.Tests.Funcionarios.ArmazenadorDeFuncionarioTests&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=b8fd1ba3_002D21bb_002D4d56_002D86b9_002D42f73b19b132/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="QuandoNomeInvalido_NaoDeveCriarEmpresa" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
