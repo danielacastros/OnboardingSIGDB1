@@ -35,6 +35,7 @@ public class FuncionarioController : ControllerBase
         if (funcionarioDto == null)
         {
             _notificationContext.AddNotification(Resource.KeyFuncionario, Resource.DadosNaoFornecidos);
+            return BadRequest(_notificationContext);
         }
 
         await _armazenadorDeFuncionario.Armazenar(funcionarioDto);
@@ -45,5 +46,11 @@ public class FuncionarioController : ControllerBase
         }
 
         return Ok();
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Get()
+    {
+        await _armazenadorDeFuncionario.
     }
 }

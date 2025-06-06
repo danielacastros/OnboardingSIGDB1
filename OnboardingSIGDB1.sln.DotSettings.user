@@ -2,9 +2,13 @@
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AAbstractValidator_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003FAppData_003FRoaming_003FJetBrains_003FRider2024_002E3_003Fresharper_002Dhost_003FSourcesCache_003F6ec65dfda85d46e40922ff25f4a16b85ca796344c5d8f12ba3d8dff03a549_003FAbstractValidator_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003ADefaultValidatorExtensions_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003FAppData_003FRoaming_003FJetBrains_003FRider2024_002E3_003Fresharper_002Dhost_003FSourcesCache_003F8120434ece7ab7e877bfa2b246fc7414cf0d66b7956237816b83e12749cde_003FDefaultValidatorExtensions_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003ATargetInvocationException_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003FAppData_003FRoaming_003FJetBrains_003FRider2024_002E3_003Fresharper_002Dhost_003FDecompilerCache_003Fdecompiler_003F76803a04e31b4fee99d90bcbfc5a6bdde8e930_003F08_003Fb4bc34e8_003FTargetInvocationException_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=220a9961_002Dfc2d_002D40c8_002D9ab2_002Dfac7c3e32395/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="QuandoDadosValidos_DeveArmazenarEmpresa #6" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=220a9961_002Dfc2d_002D40c8_002D9ab2_002Dfac7c3e32395/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="QuandoDadosValidos_DeveArmazenarEmpresa #6" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;xUnit::F75E9DE0-0E52-4D35-8A2B-09C5D5441ADA::net9.0::OnboardingSIGDB1.Tests.Empresas.ArmazenadorDeEmpresaTests.QuandoDadosValidos_DeveArmazenarEmpresa&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::F75E9DE0-0E52-4D35-8A2B-09C5D5441ADA::net9.0::OnboardingSIGDB1.Tests.Funcionarios.ArmazenadorDeFuncionarioTests&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::F75E9DE0-0E52-4D35-8A2B-09C5D5441ADA::net9.0::OnboardingSIGDB1.Tests.Empresas.EmpresaTests&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::F75E9DE0-0E52-4D35-8A2B-09C5D5441ADA::net9.0::OnboardingSIGDB1.Tests.Empresas.ArmazenadorDeEmpresaTests&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::F75E9DE0-0E52-4D35-8A2B-09C5D5441ADA::net9.0::OnboardingSIGDB1.Tests.Funcionarios.FuncionarioTests&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=23986f16_002D7244_002D4251_002D94ca_002D6ce4f5ed5048/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="QuandoDadosValidos_DeveArmazenarEmpresa #4" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
@@ -36,7 +40,7 @@
     &lt;TestId&gt;xUnit::F75E9DE0-0E52-4D35-8A2B-09C5D5441ADA::net9.0::OnboardingSIGDB1.Tests.Empresas.ArmazenadorDeEmpresaTests.QuandoCnpjNaoInformado_NaoDeveArmazenar&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=9237200b_002D7a0a_002D4758_002Db2d4_002D2a16b7a941eb/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="QuandoDadosValidos_DeveArmazenarEmpresa #7" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=9237200b_002D7a0a_002D4758_002Db2d4_002D2a16b7a941eb/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="QuandoDadosValidos_DeveArmazenarEmpresa #7" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;xUnit::F75E9DE0-0E52-4D35-8A2B-09C5D5441ADA::net9.0::OnboardingSIGDB1.Tests.Empresas.ArmazenadorDeEmpresaTests.QuandoDadosValidos_DeveArmazenarEmpresa&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;xUnit::F75E9DE0-0E52-4D35-8A2B-09C5D5441ADA::net9.0::OnboardingSIGDB1.Tests.Empresas.ArmazenadorDeEmpresaTests.QuandoCnpjJaCadastrado_NaoDeveArmazenarEmpresa&lt;/TestId&gt;&#xD;

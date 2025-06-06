@@ -20,6 +20,8 @@ public class ApplicationDbContext : DbContext
         
         modelBuilder.Ignore<FluentValidation.Results.ValidationFailure>();
         modelBuilder.Ignore<FluentValidation.Results.ValidationResult>();
+        modelBuilder.Entity<Funcionario>().Ignore(e => e.Valid);
+        modelBuilder.Entity<Funcionario>().Ignore(e => e.Invalid);
     }
 
     public async Task Commit()

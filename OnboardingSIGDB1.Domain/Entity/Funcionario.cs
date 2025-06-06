@@ -1,5 +1,6 @@
 ﻿using System;
 using OnboardingSIGDB1.Domain.Notifications.Validators;
+using OnboardingSIGDB1.Domain.Utils;
 
 namespace OnboardingSIGDB1.Domain.Entity;
 
@@ -11,7 +12,7 @@ public class Funcionario : Entidade
     public Funcionario(string nome, string cpf, DateTime? dataContratacao)
     {
         Nome = nome;
-        Cpf = cpf;
+        Cpf = CpfHelper.FormatarCpf(cpf);
         DataContratacao = dataContratacao;
 
         Validar(this, new FuncionarioValidator());

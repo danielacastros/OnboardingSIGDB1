@@ -21,7 +21,7 @@ namespace OnboardingSIGDB1.IOC
             services.AddScoped(typeof(IFuncionarioRepositorio), typeof(FuncionarioRepositorio));
             services.AddScoped(typeof(INotificationContext), typeof(NotificationContext));
             services.AddScoped<ArmazenadorDeEmpresa>();
-            
+            services.AddScoped<ArmazenadorDeFuncionario>();
             services.AddScoped<NotificationContext>();
             
         }

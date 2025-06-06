@@ -1,4 +1,5 @@
 ﻿using OnboardingSIGDB1.Domain.Base;
+using OnboardingSIGDB1.Domain.Entity;
 using OnboardingSIGDB1.Tests._Builders;
 
 namespace OnboardingSIGDB1.Tests.Funcionarios;
@@ -16,7 +17,7 @@ public class FuncionarioTests
         // assert
         Assert.False(funcionario.Valid);
         Assert.Contains(funcionario.ValidationResult.Errors,
-            f => f.PropertyName == "Nome" && f.ErrorMessage == Resource.NomeObrigatorio);
+            f => f.PropertyName == nameof(Funcionario.Nome) && f.ErrorMessage == Resource.NomeObrigatorio);
     }
     
     [Theory]
@@ -30,13 +31,13 @@ public class FuncionarioTests
         // assert
         Assert.False(funcionario.Valid);
         Assert.Contains(funcionario.ValidationResult.Errors,
-            f => f.PropertyName == "Cpf" && f.ErrorMessage == Resource.CpfObrigatorio);
+            f => f.PropertyName == nameof(Funcionario.Cpf) && f.ErrorMessage == Resource.CpfObrigatorio);
         Assert.Contains(funcionario.ValidationResult.Errors,
-            f => f.PropertyName == "Cpf" && f.ErrorMessage == Resource.CpfInvalido);
+            f => f.PropertyName == nameof(Funcionario.Cpf) && f.ErrorMessage == Resource.CpfInvalido);
     }
 
     [Theory]
-    [InlineData("111111111111")]
+    [InlineData("123456789101")]
     public void NaoDeveCpfTerMaisQueOnzeCaracteres(string cpfInvalido)
     {
         // arrange 
@@ -45,18 +46,18 @@ public class FuncionarioTests
         // assert
         Assert.False(funcionario.Valid);
         Assert.Contains(funcionario.ValidationResult.Errors, 
-            f => f.PropertyName == "Cpf" && f.ErrorMessage == Resource.QuantidadeDeCaracteresInvalida);
+            f => f.PropertyName == nameof(Funcionario.Cpf) && f.ErrorMessage == Resource.QuantidadeDeCaracteresInvalida);
     }
 
     [Theory]
-    [InlineData("111.111.111-11")]
+    [InlineData("111.222.333-44")]
     public void NaoDeveFuncionarioTerUmCpfInvalido(string cpfInvalido)
     {
         var funcionario = FuncionarioBuilder.Novo().ComCpf(cpfInvalido).Build();
         
         Assert.False(funcionario.Valid);
         Assert.Contains(funcionario.ValidationResult.Errors,
-            f => f.PropertyName == "Cpf" && f.ErrorMessage == Resource.CpfInvalido);
+            f => f.PropertyName == nameof(Funcionario.Cpf) && f.ErrorMessage == Resource.CpfInvalido);
     }
 
     [Theory]
@@ -69,9 +70,6 @@ public class FuncionarioTests
         // assert
         Assert.False(funcionario.Valid);
         Assert.Contains(funcionario.ValidationResult.Errors,
-            f => f.PropertyName == "Nome" && f.ErrorMessage == Resource.QuantidadeDeCaracteresInvalida);
+            f => f.PropertyName == nameof(Funcionario.Nome) && f.ErrorMessage == Resource.QuantidadeDeCaracteresInvalida);
     }
-    
-    
-    
 }

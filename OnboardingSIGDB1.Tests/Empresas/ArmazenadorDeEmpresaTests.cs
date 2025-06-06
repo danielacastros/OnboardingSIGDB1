@@ -163,7 +163,7 @@ public class ArmazenadorDeEmpresaTests
     }
     
     [Fact]
-    public async Task QuandoDataDeFundacaoNaoInformada_NaoDeveArmazenar()
+    public async Task QuandoDataDeFundacaoMenorQueValorMinimo_NaoDeveArmazenarEmpresa()
     {
         //arrange
         var empresaDto = EmpresaDtoBuilder.Novo().ComDataFundacao(DateTime.MinValue).Build();
@@ -173,6 +173,7 @@ public class ArmazenadorDeEmpresaTests
             .ComCnpj(empresaDto.Cnpj)
             .ComDataFundacao(DateTime.MinValue)
             .Build();
+        
         _mapperMock.Setup(m => m.Map<Empresa>(empresaDto))
             .Returns(empresa);
         
@@ -183,9 +184,7 @@ public class ArmazenadorDeEmpresaTests
         _empresaRepositorioMock.Verify(e => 
             e.Adicionar(It.IsAny<Empresa>()), Times.Never);
         _notificationContextMock.Verify(x => 
-            x.AddNotification("DataFundacao", Resource.DataInvalida), Times.Once);
-        _notificationContextMock.Verify(x => 
-            x.AddNotification("DataFundacao", "'Data Fundacao' deve ser informado."), Times.Once);
+            x.AddNotification(nameof(Empresa.DataFundacao), Resource.DataInvalida), Times.Once);
     }
 
     [Fact]
@@ -239,7 +238,7 @@ public class ArmazenadorDeEmpresaTests
         // assert
         _empresaRepositorioMock.Verify(r => r.Excluir(It.IsAny<Empresa>()), Times.Never);
         _notificationContextMock.Verify(
-            x => x.AddNotification(It.IsAny<Notification>()), Times.Once);
+            x => x.AddNotification(Resource.KeyEmpresa, Resource.EmpresaNaoEncontrada), Times.Once);
     }
     
 }

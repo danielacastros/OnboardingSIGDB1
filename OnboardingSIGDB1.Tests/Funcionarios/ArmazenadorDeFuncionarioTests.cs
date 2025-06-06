@@ -1,7 +1,11 @@
 ﻿using AutoMapper;
+using FluentValidation.Results;
 using Moq;
+using OnboardingSIGDB1.Domain.Base;
+using OnboardingSIGDB1.Domain.Entity;
 using OnboardingSIGDB1.Domain.Interfaces;
 using OnboardingSIGDB1.Domain.Notifications;
+using OnboardingSIGDB1.Domain.Notifications.Validators;
 using OnboardingSIGDB1.Domain.Services;
 using OnboardingSIGDB1.Domain.Utils;
 using OnboardingSIGDB1.Tests._Builders;
@@ -17,9 +21,10 @@ public class ArmazenadorDeFuncionarioTests
 
     public ArmazenadorDeFuncionarioTests()
     {
-        _armazenadorDeFuncionario = new ArmazenadorDeFuncionario(_funcionarioRepositorioMock.Object, _notificationContextMock.Object, _mapperMock.Object);
+        _funcionarioRepositorioMock = new Mock<IFuncionarioRepositorio>();
         _notificationContextMock = new Mock<INotificationContext>();
         _mapperMock = new Mock<IMapper>();
+        _armazenadorDeFuncionario = new ArmazenadorDeFuncionario(_funcionarioRepositorioMock.Object, _notificationContextMock.Object, _mapperMock.Object);
     }
     
     [Fact]
@@ -33,7 +38,6 @@ public class ArmazenadorDeFuncionarioTests
             .ComCpf(funcionarioDto.Cpf)
             .ComDataDeContratacao(funcionarioDto.DataContratacao)
             .Build();
-
         var cpfFormatado = CpfHelper.FormatarCpf(funcionarioDto.Cpf);
 
         _funcionarioRepositorioMock.Setup(r => r.BuscarPorCpf(cpfFormatado)).ReturnsAsync(funcionario);
@@ -51,35 +55,53 @@ public class ArmazenadorDeFuncionarioTests
     {
         // arrange 
         var funcionarioDto = FuncionarioDtoBuilder.Novo().Build();
+        
         var funcionario = FuncionarioBuilder
             .Novo()
-            .ComNome(funcionarioDto.Nome)
-            .ComCpf(funcionarioDto.Cpf)
-            .ComDataDeContratacao(funcionarioDto.DataContratacao)
+            .ComNome("")
+            .ComCpf("416.552.018-29")
+            .ComDataDeContratacao(DateTime.MinValue)
             .Build();
+        
+        _mapperMock.Setup(m => m.Map<Funcionario>(funcionarioDto))
+            .Returns(funcionario);
+        
         // act
         await _armazenadorDeFuncionario.Armazenar(funcionarioDto);
         
         // assert
-
+        _funcionarioRepositorioMock.Verify(f => f.Adicionar(It.IsAny<Funcionario>()), Times.Never);
+        _notificationContextMock.Verify(x => 
+            x.AddNotification(nameof(Funcionario.Nome),Resource.NomeObrigatorio), Times.Once);
+        _notificationContextMock.Verify(x => 
+            x.AddNotification(nameof(Funcionario.Cpf),Resource.CpfInvalido), Times.Once);
+        _notificationContextMock.Verify(x => 
+            x.AddNotification(nameof(Funcionario.DataContratacao), Resource.DataInvalida), Times.Once);
     }
     
     [Fact]
     public async Task QuandoCpfJaCadastrado_NaoDeveArmazenarFuncionario()
     {
         // arrange 
-        var funcionarioDto = FuncionarioDtoBuilder.Novo().Build();
+        var funcionarioDto = FuncionarioDtoBuilder.Novo().ComCpf("41655301829").Build();
+        
         var funcionario = FuncionarioBuilder
             .Novo()
             .ComNome(funcionarioDto.Nome)
             .ComCpf(funcionarioDto.Cpf)
             .ComDataDeContratacao(funcionarioDto.DataContratacao)
             .Build();
+
+        _funcionarioRepositorioMock
+            .Setup(r => r.BuscarPorCpf(funcionarioDto.Cpf))
+            .ReturnsAsync(funcionario);
+        
         // act
         await _armazenadorDeFuncionario.Armazenar(funcionarioDto);
         
         // assert
-
+        _funcionarioRepositorioMock.Verify(r => r.Adicionar(It.IsAny<Funcionario>()), Times.Never);
+        _notificationContextMock.Verify(x => x.AddNotification(nameof(Funcionario.Cpf), Resource.CpfJaCadastrado));
     }
     
     [Fact]
@@ -87,17 +109,78 @@ public class ArmazenadorDeFuncionarioTests
     {
         // arrange 
         var funcionarioDto = FuncionarioDtoBuilder.Novo().Build();
+        
         var funcionario = FuncionarioBuilder
             .Novo()
-            .ComNome(funcionarioDto.Nome)
-            .ComCpf(funcionarioDto.Cpf)
-            .ComDataDeContratacao(funcionarioDto.DataContratacao)
+            .ComCpf("416.552.018-29")
             .Build();
         
+        _mapperMock.Setup(m => m.Map<Funcionario>(funcionarioDto))
+            .Returns(funcionario);
+
         // act
         await _armazenadorDeFuncionario.Armazenar(funcionarioDto);
         
         // assert
+        _funcionarioRepositorioMock.Verify(f => f.Adicionar(It.IsAny<Funcionario>()), Times.Never);
+        _notificationContextMock.Verify(x => x.AddNotification(nameof(Funcionario.Cpf), Resource.CpfInvalido),Times.Once);
+    }
+    
+    [Fact]
+    public async Task QuandoNomeNaoInformado_NaoDeveCadastrarFuncionario()
+    {
+        // arrange 
+        var funcionarioDto = FuncionarioDtoBuilder.Novo().Build();
+        var funcionario = FuncionarioBuilder.Novo().ComNome("").Build();
 
+        _mapperMock.Setup(m => m.Map<Funcionario>(funcionarioDto)).Returns(funcionario);
+        
+        // act
+        await _armazenadorDeFuncionario.Armazenar(funcionarioDto);
+
+        // assert
+        _funcionarioRepositorioMock.Verify(r => r.Adicionar(It.IsAny<Funcionario>()), Times.Never);
+        _notificationContextMock.Verify(x => x.AddNotification(nameof(Funcionario.Nome), Resource.NomeObrigatorio));
+    }
+
+    [Fact]
+    public async Task QuandoCpfNaoInformado_NaoDeveCadastrarFuncionario()
+    {
+        //arrange
+        var funcionarioDto = FuncionarioDtoBuilder.Novo().Build();
+        var funcionario = FuncionarioBuilder.Novo().ComCpf("").Build();
+
+        _mapperMock
+            .Setup(m => m.Map<Funcionario>(funcionarioDto))
+            .Returns(funcionario);
+        // act
+        await _armazenadorDeFuncionario.Armazenar(funcionarioDto);
+        
+        // assert
+        _funcionarioRepositorioMock.Verify(r => 
+            r.Adicionar(It.IsAny<Funcionario>()), Times.Never);
+        _notificationContextMock.Verify(x => 
+            x.AddNotification(nameof(Funcionario.Cpf), Resource.CpfObrigatorio));
+    }
+
+    [Fact]
+    public async Task QuandoDataMenorQueValorMinimo_NaoDeveCadastrarFuncionario()
+    {
+        //arrange
+        var funcionarioDto = FuncionarioDtoBuilder.Novo().Build();
+        var funcionario = FuncionarioBuilder.Novo().ComDataDeContratacao(DateTime.MinValue).Build();
+
+        _mapperMock
+            .Setup(m => m.Map<Funcionario>(funcionarioDto))
+            .Returns(funcionario);
+        // act
+        await _armazenadorDeFuncionario.Armazenar(funcionarioDto);
+        
+        // assert
+        _funcionarioRepositorioMock.Verify(r => 
+            r.Adicionar(It.IsAny<Funcionario>()), Times.Never);
+        _notificationContextMock.Verify(x => 
+            x.AddNotification(nameof(Funcionario.DataContratacao), Resource.DataInvalida));
+        
     }
 }
