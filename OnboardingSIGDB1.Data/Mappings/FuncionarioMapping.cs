@@ -19,5 +19,13 @@ public class FuncionarioMapping : IEntityTypeConfiguration<Funcionario>
         builder.Property(x => x.Cpf)
             .IsRequired()
             .HasMaxLength(11);
+
+        builder.Property(x => x.DataContratacao)
+            .HasMaxLength(7);
+        
+        builder.HasOne(f => f.Empresa)
+            .WithMany(e => e.Funcionarios)
+            .HasForeignKey(f => f.EmpresaId)
+            .IsRequired(false);
     }
 }

@@ -9,7 +9,7 @@ public class FuncionarioDtoBuilder
     private Faker _faker;
     private string _nome;
     private string _cpf;
-    private DateTime _dataContratacao;
+    private DateTime? _dataContratacao;
 
     public FuncionarioDtoBuilder()
     {
@@ -45,12 +45,11 @@ public class FuncionarioDtoBuilder
 
     public FuncionarioDto Build()
     {
-        var funcionarioDto = new FuncionarioDto
+        return new FuncionarioDto
         {
             Nome = _nome,
             Cpf = _cpf,
             DataContratacao = _dataContratacao
         };
-        return funcionarioDto;
     }
 }

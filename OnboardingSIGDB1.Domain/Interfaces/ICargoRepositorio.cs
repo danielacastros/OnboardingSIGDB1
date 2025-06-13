@@ -1,6 +1,8 @@
-﻿namespace OnboardingSIGDB1.Domain.Interfaces;
+﻿using OnboardingSIGDB1.Domain.Entity;
 
-public interface ICargoRepositorio
+namespace OnboardingSIGDB1.Domain.Interfaces;
+
+public interface ICargoRepositorio : IRepositorio<Cargo>
 {
     
 }

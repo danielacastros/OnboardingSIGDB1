@@ -1,6 +1,13 @@
-﻿namespace OnboardingSIGDB1.API.Profiles;
+﻿using AutoMapper;
+using OnboardingSIGDB1.Domain.Dto.Cargo;
+using OnboardingSIGDB1.Domain.Entity;
 
-public class CargoProfile
+namespace OnboardingSIGDB1.API.Profiles;
+
+public class CargoProfile : Profile
 {
-    
+    public CargoProfile()
+    {
+        CreateMap<CargoDto, Cargo>();
+    }
 }

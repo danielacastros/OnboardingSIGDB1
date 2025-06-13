@@ -3,6 +3,7 @@
 using Microsoft.AspNetCore.Mvc;
 using OnboardingSIGDB1.Domain.Base;
 using OnboardingSIGDB1.Domain.Dto;
+using OnboardingSIGDB1.Domain.Dto.Funcionario;
 using OnboardingSIGDB1.Domain.Entity;
 using OnboardingSIGDB1.Domain.Interfaces;
 using OnboardingSIGDB1.Domain.Notifications;
@@ -45,7 +46,7 @@ public class EmpresaController : ControllerBase
             Id = e.Id,
             Nome = e.Nome,
             Cnpj = CnpjHelper.FormatarCnpjFormatoPadrao(e.Cnpj),
-            DataFundacao = e.DataFundacao.ToString("dd/MM/yyyy")
+            DataFundacao = e.DataFundacao
         });
 
         return Ok(empresaFormatoDtos);
@@ -73,7 +74,7 @@ public class EmpresaController : ControllerBase
             Id = e.Id,
             Nome = e.Nome,
             Cnpj = CnpjHelper.FormatarCnpjFormatoPadrao(e.Cnpj),
-            DataFundacao = e.DataFundacao.ToString("dd/MM/yyyy")
+            DataFundacao = e.DataFundacao
         }).ToList();
             
         return Ok(listaDeEmpresasRetornada);
@@ -101,7 +102,7 @@ public class EmpresaController : ControllerBase
             Id = e.Id,
             Nome = e.Nome,
             Cnpj = CnpjHelper.FormatarCnpjFormatoPadrao(e.Cnpj),
-            DataFundacao = e.DataFundacao.ToString("dd/MM/yyyy")
+            DataFundacao = e.DataFundacao
         }).ToList();
             
         return new ResultadoDaConsultaBase(){Lista = listaDeEmpresasRetornada, Total = listaDeEmpresasRetornada.Count};
@@ -111,7 +112,14 @@ public class EmpresaController : ControllerBase
     public async Task<IActionResult> Get(int id)
     {
         var empresa = await _empresaRepositorio.ObterPorId(id);
-        return Ok(empresa);
+        var empresaFormatoDto = new BuscarEmpresasDto
+        {
+            Id = empresa.Id,
+            Nome = empresa.Nome,
+            Cnpj = empresa.Cnpj,
+            DataFundacao = empresa.DataFundacao
+        };
+        return Ok(empresaFormatoDto);
     }
     
     [HttpGet("pesquisar")]
@@ -128,10 +136,29 @@ public class EmpresaController : ControllerBase
             Id = e.Id,
             Nome = e.Nome,
             Cnpj = CnpjHelper.FormatarCnpjFormatoPadrao(e.Cnpj),
-            DataFundacao = e.DataFundacao.ToString("dd/MM/yyyy")
+            DataFundacao = e.DataFundacao
         }).ToList();
         
         return Ok(empresaOk);
+    }
+    
+    [HttpGet("empresa-funcionarios/{id}")]
+    public async Task<IActionResult> ListarFuncionariosVinculados(int id)
+    {
+        var empresa = await _empresaRepositorio.ListarFuncionariosVinculados(id);
+        
+        var dto = new ListarEmpresaComFuncionariosDto()
+        {
+            Nome = empresa.Nome,
+            Cnpj = empresa.Cnpj,
+            Funcionarios = empresa.Funcionarios.Select(f => new FuncionarioDto
+            {
+                Nome = f.Nome,
+                Cpf = f.Cpf,
+                DataContratacao = f.DataContratacao.Value
+            }).ToList()
+        };
+        return Ok(dto);
     }
     
     /// <summary>
@@ -191,6 +218,8 @@ public class EmpresaController : ControllerBase
     public async Task<IActionResult> Delete(int id)
     {
         await _armazenadorDeEmpresa.Excluir(id);
+        if (_notificationContext.HasNotifications)
+            return BadRequest(_notificationContext.Notifications);
         return Ok();
     }
 }

@@ -10,4 +10,5 @@ public interface IEmpresaRepositorio : IRepositorio<Empresa>
     Task<Empresa> BuscarPorCnpj(string cnpj);
     Task<List<Empresa>> ObterTodasPorIntervaloDataFundacao(DateTime dataInicial, DateTime dataFinal);
     Task<List<Empresa>> ObterEmpresaPeloNome(string nome);
+    Task<Empresa> ListarFuncionariosVinculados(int id);
 }

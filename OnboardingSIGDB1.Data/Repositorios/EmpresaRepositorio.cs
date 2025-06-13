@@ -39,4 +39,13 @@ public class EmpresaRepositorio : RepositorioBase<Empresa>, IEmpresaRepositorio
             .ToListAsync();
         return empresas.Any() ? empresas : new List<Empresa>();
     }
+
+    public async Task<Empresa> ListarFuncionariosVinculados(int id)
+    {
+        Empresa funcionariosVinculados = await Context.Set<Empresa>()
+            .Include(e => e.Funcionarios)
+            .FirstOrDefaultAsync(e => e.Id == id);
+
+        return funcionariosVinculados;
+    }
 }

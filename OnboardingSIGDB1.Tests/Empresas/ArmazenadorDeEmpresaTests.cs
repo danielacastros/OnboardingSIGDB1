@@ -17,6 +17,7 @@ public class ArmazenadorDeEmpresaTests
     private readonly ITestOutputHelper _output;
     private readonly Faker _faker;
     private readonly Mock<IEmpresaRepositorio> _empresaRepositorioMock;
+    private readonly Mock<IFuncionarioRepositorio> _funcionarioRepositorioMock;
     private readonly ArmazenadorDeEmpresa _armazenadorDeEmpresa;
     private readonly Mock<INotificationContext> _notificationContextMock;
     private readonly Mock<IMapper> _mapperMock;
@@ -26,24 +27,12 @@ public class ArmazenadorDeEmpresaTests
         _output = output;
         _faker = new Faker();
         _empresaRepositorioMock = new Mock<IEmpresaRepositorio>();
+        _funcionarioRepositorioMock = new Mock<IFuncionarioRepositorio>();
         _notificationContextMock = new Mock<INotificationContext>();
         _mapperMock = new Mock<IMapper>();
-        _armazenadorDeEmpresa = new ArmazenadorDeEmpresa(_empresaRepositorioMock.Object, _notificationContextMock.Object, _mapperMock.Object);
+        _armazenadorDeEmpresa = new ArmazenadorDeEmpresa(_empresaRepositorioMock.Object, _funcionarioRepositorioMock.Object, _notificationContextMock.Object, _mapperMock.Object);
     }
 
-    [Fact]
-    public async Task DeveRetornarEmpresas()
-    {
-        // arrange
-        
-        
-        // act
-        
-        
-        // assert
-        
-    }
-    
     [Fact]
     public async Task QuandoDadosValidos_DeveArmazenarEmpresa()
     {
@@ -229,12 +218,11 @@ public class ArmazenadorDeEmpresaTests
     public async Task QuandoEmpresaNaoExistir_NaoDeveExcluirEmpresa()
     {
         // arrange
-        var empresa = EmpresaBuilder.Nova().Build();
-        _empresaRepositorioMock.Setup(r => r.ObterPorId(empresa.Id))
-            .ReturnsAsync((Empresa)null);
+        var id = -1;
         
         // act 
-        await _armazenadorDeEmpresa.Excluir(empresa.Id);
+        await _armazenadorDeEmpresa.Excluir(id);
+        
         // assert
         _empresaRepositorioMock.Verify(r => r.Excluir(It.IsAny<Empresa>()), Times.Never);
         _notificationContextMock.Verify(

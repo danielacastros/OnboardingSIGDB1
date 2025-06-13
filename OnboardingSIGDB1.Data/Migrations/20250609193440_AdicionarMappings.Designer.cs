@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OnboardingSIGDB1.Data.Contextos;
 
@@ -11,9 +12,11 @@ using OnboardingSIGDB1.Data.Contextos;
 namespace OnboardingSIGDB1.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250609193440_AdicionarMappings")]
+    partial class AdicionarMappings
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -49,18 +52,13 @@ namespace OnboardingSIGDB1.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Cnpj")
-                        .IsRequired()
-                        .HasMaxLength(14)
-                        .HasColumnType("nvarchar(14)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("DataFundacao")
-                        .HasMaxLength(7)
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Nome")
-                        .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Valid")
                         .HasColumnType("bit");
@@ -84,11 +82,7 @@ namespace OnboardingSIGDB1.Data.Migrations
                         .HasColumnType("nvarchar(11)");
 
                     b.Property<DateTime?>("DataContratacao")
-                        .HasMaxLength(7)
                         .HasColumnType("datetime2");
-
-                    b.Property<int?>("EmpresaId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Nome")
                         .IsRequired()
@@ -97,24 +91,7 @@ namespace OnboardingSIGDB1.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EmpresaId");
-
                     b.ToTable("Funcionarios", (string)null);
-                });
-
-            modelBuilder.Entity("OnboardingSIGDB1.Domain.Entity.Funcionario", b =>
-                {
-                    b.HasOne("OnboardingSIGDB1.Domain.Entity.Empresa", "Empresa")
-                        .WithMany("Funcionarios")
-                        .HasForeignKey("EmpresaId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("Empresa");
-                });
-
-            modelBuilder.Entity("OnboardingSIGDB1.Domain.Entity.Empresa", b =>
-                {
-                    b.Navigation("Funcionarios");
                 });
 #pragma warning restore 612, 618
         }

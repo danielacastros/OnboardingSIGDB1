@@ -1,6 +1,4 @@
-﻿using Moq;
-using OnboardingSIGDB1.Domain.Interfaces;
-using OnboardingSIGDB1.Tests._Builders;
+﻿using OnboardingSIGDB1.Tests._Builders;
 
 namespace OnboardingSIGDB1.Tests.Empresas;
 

@@ -16,15 +16,20 @@ public class ArmazenadorDeFuncionarioTests
 {
     private ArmazenadorDeFuncionario _armazenadorDeFuncionario;
     private readonly Mock<IFuncionarioRepositorio> _funcionarioRepositorioMock;
+    private readonly Mock<IEmpresaRepositorio> _empresaRepositorioMock;
     private Mock<INotificationContext> _notificationContextMock;
     private Mock<IMapper> _mapperMock;
 
     public ArmazenadorDeFuncionarioTests()
     {
         _funcionarioRepositorioMock = new Mock<IFuncionarioRepositorio>();
+        _empresaRepositorioMock = new Mock<IEmpresaRepositorio>();
         _notificationContextMock = new Mock<INotificationContext>();
         _mapperMock = new Mock<IMapper>();
-        _armazenadorDeFuncionario = new ArmazenadorDeFuncionario(_funcionarioRepositorioMock.Object, _notificationContextMock.Object, _mapperMock.Object);
+        _armazenadorDeFuncionario = new ArmazenadorDeFuncionario(_funcionarioRepositorioMock.Object, 
+            _empresaRepositorioMock.Object, 
+            _notificationContextMock.Object, 
+            _mapperMock.Object);
     }
     
     [Fact]
@@ -32,6 +37,7 @@ public class ArmazenadorDeFuncionarioTests
     {
         // arrange 
         var funcionarioDto = FuncionarioDtoBuilder.Novo().Build();
+        
         var funcionario = FuncionarioBuilder
             .Novo()
             .ComNome(funcionarioDto.Nome)
@@ -183,4 +189,88 @@ public class ArmazenadorDeFuncionarioTests
             x.AddNotification(nameof(Funcionario.DataContratacao), Resource.DataInvalida));
         
     }
+
+    [Fact]
+    public async Task QuandoIdInvalido_NaoDeveExcluirFuncionario()
+    {
+        // arrange
+        int id = 0;
+        
+        //act 
+        await _armazenadorDeFuncionario.Excluir(id);
+        
+        // assert
+        _funcionarioRepositorioMock.Verify(r => r.Excluir(It.IsAny<Funcionario>()), Times.Never);
+        _notificationContextMock.Verify(x => x.AddNotification(Resource.KeyFuncionario, Resource.FuncionarioNaoEncontrado));
+    }
+
+    [Fact]
+    public async Task QuandoIdValido_DeveExcluirFuncionario()
+    {
+        // arrange
+        var funcionario = FuncionarioBuilder.Novo().Build();
+        _funcionarioRepositorioMock.Setup(r => r.ObterPorId(funcionario.Id)).ReturnsAsync(funcionario);
+
+        //act
+        await _armazenadorDeFuncionario.Excluir(funcionario.Id);
+        
+        //assert
+        _funcionarioRepositorioMock.Verify(r => r.Excluir(It.IsAny<Funcionario>()), Times.Once);
+        _notificationContextMock.Verify(x => x.AddNotification(It.IsAny<Notification>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task QuandoFuncionarioVinculadoAEmpresa_NaoDeveAlterarVinculo()
+    {
+        // arrange 
+        var vinculoEmpresaDto = VinculoEmpresaDtoBuilder.Novo().Build();
+        var empresa = EmpresaBuilder.Nova().Build();
+        var funcionario = FuncionarioBuilder.Novo().ComEmpresaId(vinculoEmpresaDto.EmpresaId).ComEmpresa(empresa).Build();
+        
+        _empresaRepositorioMock.Setup(r => r.ObterPorId(vinculoEmpresaDto.EmpresaId)).ReturnsAsync(empresa);
+        _funcionarioRepositorioMock.Setup(r => r.ObterPorId(vinculoEmpresaDto.FuncionarioId)).ReturnsAsync(funcionario);
+        
+        // act
+        await _armazenadorDeFuncionario.VincularEmpresa(vinculoEmpresaDto);
+        
+        // assert
+        _funcionarioRepositorioMock.Verify(r => r.Alterar(It.IsAny<Funcionario>()), Times.Never);
+        _notificationContextMock.Verify(x => x.AddNotification(Resource.KeyFuncionario, Resource.VinculoJaCadastrado), Times.Once);
+        
+    }
 }
+
+
+/*
+ public async Task VincularEmpresa(VinculoEmpresaDto vinculoEmpresaDto)
+    {
+        if (vinculoEmpresaDto == null)
+        {
+            _notificationContext.AddNotification(Resource.KeyFuncionario, Resource.DadosNaoFornecidos);
+            return;
+        }
+
+        var funcionario = await _funcionarioRepositorio.ObterPorId(vinculoEmpresaDto.FuncionarioId);
+        if (funcionario == null)
+        {
+            _notificationContext.AddNotification(Resource.KeyFuncionario, Resource.FuncionarioNaoEncontrado);
+            return;
+        }
+        
+        var empresa = await _empresaRepositorio.ObterPorId(vinculoEmpresaDto.EmpresaId);
+        if (empresa == null)
+        {
+            _notificationContext.AddNotification(Resource.KeyEmpresa, Resource.EmpresaNaoEncontrada);
+            return;
+        }
+        
+        var vinculoFuncionarioEmpresa = funcionario.VincularEmpresa(empresa);
+        if (!vinculoFuncionarioEmpresa)
+        {
+            _notificationContext.AddNotification(Resource.KeyFuncionario, Resource.VinculoJaCadastrado);
+            return;
+        }
+
+        await _empresaRepositorio.Alterar(empresa);
+    }
+ */

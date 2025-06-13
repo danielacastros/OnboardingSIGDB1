@@ -8,5 +8,5 @@ public class EmpresaDto
 
     public string Cnpj { get; set; }
 
-    public DateTime DataFundacao { get; set; }
+    public DateTime? DataFundacao { get; set; }
 }

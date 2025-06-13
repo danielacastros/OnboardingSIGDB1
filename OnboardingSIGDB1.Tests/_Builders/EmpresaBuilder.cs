@@ -9,7 +9,7 @@ public class EmpresaBuilder
     private Faker _faker;
     private string _nome;
     private string _cnpj;
-    private DateTime _dataFundacao;
+    private DateTime? _dataFundacao;
     private int _id;
 
     public EmpresaBuilder()
@@ -18,7 +18,7 @@ public class EmpresaBuilder
         
         _nome = _faker.Company.CompanyName();
         _cnpj = _faker.Company.Cnpj();
-        _dataFundacao = _faker.Date.Past(15, DateTime.Now);
+        _dataFundacao = _faker.Date.Past(15, DateTime.Today);
     }
     
     public static EmpresaBuilder Nova()
@@ -38,15 +38,9 @@ public class EmpresaBuilder
         return this;
     }
 
-    public EmpresaBuilder ComDataFundacao(DateTime dataFundacao)
+    public EmpresaBuilder ComDataFundacao(DateTime? dataFundacao)
     {
         _dataFundacao = dataFundacao;
-        return this;
-    }
-
-    public EmpresaBuilder ComId(int id)
-    {
-        _id = id;
         return this;
     }
 

@@ -1,6 +1,12 @@
-﻿namespace OnboardingSIGDB1.Data.Repositorios;
+﻿using OnboardingSIGDB1.Data.Contextos;
+using OnboardingSIGDB1.Domain.Entity;
+using OnboardingSIGDB1.Domain.Interfaces;
 
-public class CargoRepositorio
+namespace OnboardingSIGDB1.Data.Repositorios;
+
+public class CargoRepositorio : RepositorioBase<Cargo>, ICargoRepositorio
 {
-    
+    public CargoRepositorio(ApplicationDbContext context) : base(context)
+    {
+    }
 }

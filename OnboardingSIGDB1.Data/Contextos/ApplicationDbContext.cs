@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using OnboardingSIGDB1.Data.Mappings;
 using OnboardingSIGDB1.Domain.Entity;
 
 namespace OnboardingSIGDB1.Data.Contextos;
@@ -8,6 +9,7 @@ public class ApplicationDbContext : DbContext
 {
     public DbSet<Empresa> Empresas { get; set; }
     public DbSet<Funcionario> Funcionarios { get; set; }
+    public DbSet<Cargo> Cargos { get; set; }
     
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
@@ -22,6 +24,12 @@ public class ApplicationDbContext : DbContext
         modelBuilder.Ignore<FluentValidation.Results.ValidationResult>();
         modelBuilder.Entity<Funcionario>().Ignore(e => e.Valid);
         modelBuilder.Entity<Funcionario>().Ignore(e => e.Invalid);
+        modelBuilder.Entity<Cargo>().Ignore(e => e.Valid);
+        modelBuilder.Entity<Cargo>().Ignore(e => e.Invalid);
+        modelBuilder.ApplyConfiguration(new CargoMapping());
+        modelBuilder.ApplyConfiguration(new FuncionarioMapping());
+        modelBuilder.ApplyConfiguration(new EmpresaMapping());
+        
     }
 
     public async Task Commit()

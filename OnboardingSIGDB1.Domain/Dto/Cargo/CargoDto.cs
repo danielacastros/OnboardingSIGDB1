@@ -2,5 +2,6 @@
 
 public class CargoDto
 {
-    
+    public string Descricao { get; set; }
+
 }

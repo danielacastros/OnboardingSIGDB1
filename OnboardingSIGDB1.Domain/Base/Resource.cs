@@ -12,8 +12,16 @@ public static class Resource
     public static string QuantidadeDeCaracteresInvalida = "A Quantidade de caracteres ultrapassou o limite permitido.";
 
     public static string KeyFuncionario = "Funcionário";
+    public static string FuncionarioNaoEncontrado = "Funcionário não encontrado";
     public static string CpfObrigatorio = "O CPF deve ser informado.";
     public static string CpfInvalido = "CPF inválido.";
     public static string CpfJaCadastrado = "CPF já cadastrado.";
+    
+    public static string KeyCargo = "Cargo";
+    public static string DescricaoObrigatoria = "A descrição é obrigatória.";
+    public static string CargoNaoEncontrado = "Cargo não encontrado.";
+    public static string VinculoJaCadastrado = "O funcionário já está vinculado a uma empresa.";
+    public static string NaoEPossivelExcluirEmpresa = "A empresa tem funcionários vinculados, não é possível excluí-la.";
+    
 
 }

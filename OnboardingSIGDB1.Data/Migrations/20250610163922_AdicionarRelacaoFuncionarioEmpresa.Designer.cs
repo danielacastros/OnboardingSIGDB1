@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OnboardingSIGDB1.Data.Contextos;
 
@@ -11,9 +12,11 @@ using OnboardingSIGDB1.Data.Contextos;
 namespace OnboardingSIGDB1.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250610163922_AdicionarRelacaoFuncionarioEmpresa")]
+    partial class AdicionarRelacaoFuncionarioEmpresa
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -87,7 +90,7 @@ namespace OnboardingSIGDB1.Data.Migrations
                         .HasMaxLength(7)
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("EmpresaId")
+                    b.Property<int>("EmpresaId")
                         .HasColumnType("int");
 
                     b.Property<string>("Nome")
@@ -107,7 +110,8 @@ namespace OnboardingSIGDB1.Data.Migrations
                     b.HasOne("OnboardingSIGDB1.Domain.Entity.Empresa", "Empresa")
                         .WithMany("Funcionarios")
                         .HasForeignKey("EmpresaId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("Empresa");
                 });

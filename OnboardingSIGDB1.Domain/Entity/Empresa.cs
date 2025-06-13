@@ -1,5 +1,6 @@
 ﻿using System;
-using OnboardingSIGDB1.Domain.Dto;
+using System.Collections;
+using System.Collections.Generic;
 using OnboardingSIGDB1.Domain.Notifications.Validators;
 using OnboardingSIGDB1.Domain.Utils;
 
@@ -11,9 +12,9 @@ public class Empresa : Entidade
 
     public string Cnpj { get; private set; }
 
-    public DateTime DataFundacao { get; private set; }
-
-    public Empresa(string cnpj, string nome, DateTime dataFundacao)
+    public DateTime? DataFundacao { get; private set; }
+    public virtual ICollection<Funcionario> Funcionarios { get; private set; }
+    public Empresa(string cnpj, string nome, DateTime? dataFundacao)
     {
         Cnpj =  CnpjHelper.FormatarCnpj(cnpj);
         Nome = nome;
@@ -34,7 +35,7 @@ public class Empresa : Entidade
         Validar(this, new EmpresaValidator());
     }
 
-    public void AlterarDataFundacao(DateTime fundacao)
+    public void AlterarDataFundacao(DateTime? fundacao)
     {
         DataFundacao = fundacao;
         Validar(this, new EmpresaValidator());

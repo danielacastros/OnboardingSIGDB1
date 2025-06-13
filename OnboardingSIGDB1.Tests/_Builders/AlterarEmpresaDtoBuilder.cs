@@ -19,7 +19,7 @@ public class AlterarEmpresaDtoBuilder
         _id = _faker.UniqueIndex;
         _nome = _faker.Company.CompanyName();
         _cnpj = _faker.Company.Cnpj();
-        _dataFundacao = _faker.Date.Past(15, DateTime.Now);
+        _dataFundacao = _faker.Date.Past(15, DateTime.Today);
     }
 
     public static AlterarEmpresaDtoBuilder Novo()

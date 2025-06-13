@@ -8,7 +8,7 @@ public class EmpresaDtoBuilder
 {
     private string _nome;
     private string _cnpj;
-    private DateTime _dataFundacao;
+    private DateTime? _dataFundacao;
     private Faker _faker;
 
     public EmpresaDtoBuilder()
@@ -17,7 +17,7 @@ public class EmpresaDtoBuilder
 
         _nome = _faker.Company.CompanyName();
         _cnpj = _faker.Company.Cnpj();
-        _dataFundacao = _faker.Date.Past(15, DateTime.Now);
+        _dataFundacao = _faker.Date.Past(10, DateTime.Now);
     }
 
     public static EmpresaDtoBuilder Novo()
@@ -37,7 +37,7 @@ public class EmpresaDtoBuilder
         return this;
     }
 
-    public EmpresaDtoBuilder ComDataFundacao(DateTime dataFundacao)
+    public EmpresaDtoBuilder ComDataFundacao(DateTime? dataFundacao)
     {
         _dataFundacao = dataFundacao;
         return this;

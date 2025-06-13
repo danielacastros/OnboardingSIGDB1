@@ -10,14 +10,16 @@ namespace OnboardingSIGDB1.Domain.Services;
 public class ArmazenadorDeEmpresa  
 {
     private readonly IEmpresaRepositorio _empresaRepositorio;
+    private readonly IFuncionarioRepositorio _funcionarioRepositorio;
     private readonly INotificationContext _notificationContext;
     private readonly IMapper _mapper;
 
-    public ArmazenadorDeEmpresa(IEmpresaRepositorio empresaRepositorio, 
+    public ArmazenadorDeEmpresa(IEmpresaRepositorio empresaRepositorio, IFuncionarioRepositorio funcionarioRepositorio,
         INotificationContext notificationContext, 
         IMapper mapper)
     {
         _empresaRepositorio = empresaRepositorio;
+        _funcionarioRepositorio = funcionarioRepositorio;
         _notificationContext = notificationContext;
         _mapper = mapper;
     }
@@ -68,7 +70,7 @@ public class ArmazenadorDeEmpresa
         empresa.AlterarCnpj(alterarEmpresaDto.Cnpj);
         empresa.AlterarDataFundacao(alterarEmpresaDto.DataFundacao);
         
-        if (empresa == null || empresa.Invalid)
+        if (empresa.Invalid)
         {
             foreach (var error in empresa.ValidationResult.Errors)
             {
@@ -84,10 +86,17 @@ public class ArmazenadorDeEmpresa
     public async Task Excluir(int id)
     {
         var empresa = await _empresaRepositorio.ObterPorId(id);
-
+        
         if (empresa == null)
         {
             _notificationContext.AddNotification(Resource.KeyEmpresa, Resource.EmpresaNaoEncontrada);
+            return;
+        }
+
+        var possuiFuncionario = await _funcionarioRepositorio.VerificarSePossuiFuncionarioVinculado(empresa.Id);
+        if (possuiFuncionario.Count > 0)
+        {
+            _notificationContext.AddNotification(Resource.KeyEmpresa, Resource.NaoEPossivelExcluirEmpresa);
             return;
         }
         

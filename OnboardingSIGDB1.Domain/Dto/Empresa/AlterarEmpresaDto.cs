@@ -9,6 +9,6 @@ public class AlterarEmpresaDto
 
     public string Cnpj { get; set; }
 
-    public DateTime DataFundacao { get; set; }
+    public DateTime? DataFundacao { get; set; }
     
 }

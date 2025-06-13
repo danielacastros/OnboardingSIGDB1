@@ -11,7 +11,22 @@ public class EmpresaMapping : IEntityTypeConfiguration<Empresa>
         builder.ToTable("Empresas");
         
         builder.HasKey(x => x.Id);
-        
-        
+
+        builder.Property(x => x.Nome)
+            .IsRequired()
+            .HasMaxLength(150);
+
+        builder.Property(x => x.Cnpj)
+            .IsRequired()
+            .HasMaxLength(14);
+
+        builder.Property(x => x.DataFundacao)
+            .HasMaxLength(7);
+
+        builder.HasMany(x => x.Funcionarios)
+            .WithOne(f => f.Empresa)
+            .HasForeignKey(f => f.EmpresaId)
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }
