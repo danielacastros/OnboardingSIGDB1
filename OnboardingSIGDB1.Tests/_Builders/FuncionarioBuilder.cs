@@ -55,12 +55,6 @@ public class FuncionarioBuilder
         return this;
     }
     
-    public FuncionarioBuilder ComEmpresaId(int? empresaId)
-    {
-        _empresaId = empresaId;
-        return this;
-    }
-    
     public FuncionarioBuilder ComEmpresa(Empresa? empresa)
     {
         _empresa = empresa;
@@ -71,6 +65,11 @@ public class FuncionarioBuilder
     public Funcionario Build()
     {
         var funcionario = new Funcionario(_nome, _cpf, _dataContratacao);
+        
+        if (_empresa != null)
+        {
+            funcionario.VincularEmpresa(_empresa);
+        }
         
         return funcionario;
     }

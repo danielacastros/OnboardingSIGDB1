@@ -10,6 +10,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<Empresa> Empresas { get; set; }
     public DbSet<Funcionario> Funcionarios { get; set; }
     public DbSet<Cargo> Cargos { get; set; }
+    public DbSet<FuncionarioCargo> FuncionarioCargoVinculo { get; set; }
     
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
@@ -29,7 +30,8 @@ public class ApplicationDbContext : DbContext
         modelBuilder.ApplyConfiguration(new CargoMapping());
         modelBuilder.ApplyConfiguration(new FuncionarioMapping());
         modelBuilder.ApplyConfiguration(new EmpresaMapping());
-        
+        modelBuilder.ApplyConfiguration(new FuncionarioCargoMapping());
+
     }
 
     public async Task Commit()

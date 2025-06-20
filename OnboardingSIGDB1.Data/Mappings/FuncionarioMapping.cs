@@ -27,5 +27,9 @@ public class FuncionarioMapping : IEntityTypeConfiguration<Funcionario>
             .WithMany(e => e.Funcionarios)
             .HasForeignKey(f => f.EmpresaId)
             .IsRequired(false);
+
+        builder.HasMany(f => f.Cargos)
+            .WithOne(cargo => cargo.Funcionario)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

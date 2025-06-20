@@ -22,11 +22,5 @@ public class EmpresaMapping : IEntityTypeConfiguration<Empresa>
 
         builder.Property(x => x.DataFundacao)
             .HasMaxLength(7);
-
-        builder.HasMany(x => x.Funcionarios)
-            .WithOne(f => f.Empresa)
-            .HasForeignKey(f => f.EmpresaId)
-            .IsRequired(false)
-            .OnDelete(DeleteBehavior.Restrict);
     }
 }

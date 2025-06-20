@@ -2,6 +2,7 @@
 using OnboardingSIGDB1.Domain.Base;
 using OnboardingSIGDB1.Domain.Dto.Cargo;
 using OnboardingSIGDB1.Domain.Interfaces;
+using OnboardingSIGDB1.Domain.Interfaces.Cargos;
 using OnboardingSIGDB1.Domain.Services;
 
 namespace OnboardingSIGDB1.API.Controllers;
@@ -10,15 +11,15 @@ namespace OnboardingSIGDB1.API.Controllers;
 public class CargoController : ControllerBase
 {
 
-    private readonly ArmazenadorDeCargo _armazenadorDeCargo;
+    private readonly ICargoService _cargoService;
     private readonly ICargoRepositorio _cargoRepositorio;
     private readonly INotificationContext _notificationContext;
     
-    public CargoController(ArmazenadorDeCargo armazenadorDeCargo,
+    public CargoController(ICargoService cargoService,
         ICargoRepositorio cargoRepositorio,
         INotificationContext notificationContext)
     {
-        _armazenadorDeCargo = armazenadorDeCargo;
+        _cargoService = cargoService;
         _cargoRepositorio = cargoRepositorio;
         _notificationContext = notificationContext;
     }
@@ -44,7 +45,7 @@ public class CargoController : ControllerBase
             _notificationContext.AddNotification(Resource.KeyCargo, Resource.DadosNaoFornecidos);
         }
 
-        await _armazenadorDeCargo.Armazenar(cargoDto);
+        await _cargoService.Armazenar(cargoDto);
         
         if (_notificationContext.HasNotifications)
         {
@@ -62,7 +63,7 @@ public class CargoController : ControllerBase
             _notificationContext.AddNotification(Resource.KeyCargo, Resource.DadosNaoFornecidos);
         }
 
-        await _armazenadorDeCargo.Alterar(id, cargoDto);
+        await _cargoService.Alterar(id, cargoDto);
         
         if (_notificationContext.HasNotifications)
         {
@@ -75,7 +76,7 @@ public class CargoController : ControllerBase
     [HttpDelete]
     public async Task<IActionResult> Delete(int id)
     {
-        await _armazenadorDeCargo.Excluir(id);
+        await _cargoService.Excluir(id);
         
         if (_notificationContext.HasNotifications)
         {

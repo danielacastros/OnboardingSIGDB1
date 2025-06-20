@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using OnboardingSIGDB1.Domain.Entity;
 
-namespace OnboardingSIGDB1.Domain.Interfaces;
+namespace OnboardingSIGDB1.Domain.Interfaces.Funcionarios;
 
 public interface IFuncionarioRepositorio : IRepositorio<Funcionario>
 {

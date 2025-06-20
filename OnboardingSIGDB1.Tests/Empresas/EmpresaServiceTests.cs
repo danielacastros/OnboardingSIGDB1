@@ -4,6 +4,8 @@ using Moq;
 using OnboardingSIGDB1.Domain.Base;
 using OnboardingSIGDB1.Domain.Entity;
 using OnboardingSIGDB1.Domain.Interfaces;
+using OnboardingSIGDB1.Domain.Interfaces.Empresas;
+using OnboardingSIGDB1.Domain.Interfaces.Funcionarios;
 using OnboardingSIGDB1.Domain.Notifications;
 using OnboardingSIGDB1.Domain.Services;
 using OnboardingSIGDB1.Domain.Utils;
@@ -12,17 +14,17 @@ using Xunit.Abstractions;
 
 namespace OnboardingSIGDB1.Tests.Empresas;
 
-public class ArmazenadorDeEmpresaTests
+public class EmpresaServiceTests
 {
     private readonly ITestOutputHelper _output;
     private readonly Faker _faker;
     private readonly Mock<IEmpresaRepositorio> _empresaRepositorioMock;
     private readonly Mock<IFuncionarioRepositorio> _funcionarioRepositorioMock;
-    private readonly ArmazenadorDeEmpresa _armazenadorDeEmpresa;
+    private readonly EmpresaService _empresaService;
     private readonly Mock<INotificationContext> _notificationContextMock;
     private readonly Mock<IMapper> _mapperMock;
 
-    public ArmazenadorDeEmpresaTests(ITestOutputHelper output)
+    public EmpresaServiceTests(ITestOutputHelper output)
     {
         _output = output;
         _faker = new Faker();
@@ -30,9 +32,10 @@ public class ArmazenadorDeEmpresaTests
         _funcionarioRepositorioMock = new Mock<IFuncionarioRepositorio>();
         _notificationContextMock = new Mock<INotificationContext>();
         _mapperMock = new Mock<IMapper>();
-        _armazenadorDeEmpresa = new ArmazenadorDeEmpresa(_empresaRepositorioMock.Object, _funcionarioRepositorioMock.Object, _notificationContextMock.Object, _mapperMock.Object);
+        _empresaService = new EmpresaService(_empresaRepositorioMock.Object, _funcionarioRepositorioMock.Object, _notificationContextMock.Object, _mapperMock.Object);
     }
 
+    #region Cadastrar
     [Fact]
     public async Task QuandoDadosValidos_DeveArmazenarEmpresa()
     {
@@ -56,7 +59,7 @@ public class ArmazenadorDeEmpresaTests
             .ReturnsAsync((Empresa)null);
         
         //act 
-        await _armazenadorDeEmpresa.Armazenar(empresaDto);
+        await _empresaService.Armazenar(empresaDto);
 
         //assert
         _empresaRepositorioMock.Verify(r => r.Adicionar(It.Is<Empresa>(x =>
@@ -69,7 +72,7 @@ public class ArmazenadorDeEmpresaTests
             Times.Never
         );
     }
-
+    
     [Fact]
     public async Task QuandoCnpjJaCadastrado_NaoDeveArmazenarEmpresa()
     {
@@ -85,15 +88,15 @@ public class ArmazenadorDeEmpresaTests
             .ReturnsAsync(empresaEsperada);
         
         //act
-        await _armazenadorDeEmpresa.Armazenar(empresaDto);
+        await _empresaService.Armazenar(empresaDto);
         
         //assert
         _empresaRepositorioMock.Verify(e => 
             e.Adicionar(It.IsAny<Empresa>()), Times.Never);
         _notificationContextMock.Verify(x =>
-                x.AddNotification(Resource.KeyEmpresa, Resource.CnpjCadastrado), Times.Once);
+            x.AddNotification(Resource.KeyEmpresa, Resource.CnpjCadastrado), Times.Once);
     }
-
+    
     [Fact]
     public async Task QuandoCnpjNaoInformado_NaoDeveArmazenar()
     {
@@ -116,15 +119,15 @@ public class ArmazenadorDeEmpresaTests
             .ReturnsAsync((Empresa)null);
         
         //act
-        await _armazenadorDeEmpresa.Armazenar(empresaDto);
+        await _empresaService.Armazenar(empresaDto);
 
         //assert
         _empresaRepositorioMock.Verify(e => 
             e.Adicionar(It.IsAny<Empresa>()), Times.Never);
-        //_notificationContextMock.Verify(x => 
-         //   x.AddNotification(Resource.KeyEmpresa, Resource.CnpjInvalido), Times.Once);
+        _notificationContextMock.Verify(x => 
+           x.AddNotification(Resource.KeyEmpresa, Resource.CnpjInvalido), Times.Once);
     }
-
+    
     [Fact]
     public async Task QuandoNomeNaoInformado_NaoDeveArmazenar()
     {
@@ -142,13 +145,13 @@ public class ArmazenadorDeEmpresaTests
         _output.WriteLine("empresaDto ==>" + empresaDto.Nome.ToString(), empresaDto.DataFundacao.ToString(), empresaDto.Cnpj.ToString());
         _output.WriteLine("empresa ==>" + empresa.Nome.ToString(), empresa.DataFundacao.ToString(), empresa.Cnpj.ToString());
         //act
-        await _armazenadorDeEmpresa.Armazenar(empresaDto);
+        await _empresaService.Armazenar(empresaDto);
 
         //assert
         _empresaRepositorioMock.Verify(e => 
             e.Adicionar(It.IsAny<Empresa>()), Times.Never);
         _notificationContextMock.Verify(x => 
-            x.AddNotification("Nome", "'Nome' deve ser informado."), Times.Once);
+            x.AddNotification(nameof(Empresa.Nome), Resource.NomeObrigatorio), Times.Once);
     }
     
     [Fact]
@@ -167,7 +170,7 @@ public class ArmazenadorDeEmpresaTests
             .Returns(empresa);
         
         //act
-        await _armazenadorDeEmpresa.Armazenar(empresaDto);
+        await _empresaService.Armazenar(empresaDto);
 
         //assert
         _empresaRepositorioMock.Verify(e => 
@@ -175,7 +178,9 @@ public class ArmazenadorDeEmpresaTests
         _notificationContextMock.Verify(x => 
             x.AddNotification(nameof(Empresa.DataFundacao), Resource.DataInvalida), Times.Once);
     }
-
+    #endregion
+    
+    #region Alterar
     [Fact]
     public async Task QuandoDadosValidos_DeveAlterarEmpresa()
     {
@@ -185,7 +190,7 @@ public class ArmazenadorDeEmpresaTests
         _empresaRepositorioMock.Setup(r => r.ObterPorId(empresaAlterarDto.Id)).ReturnsAsync(empresa);
         
         // act 
-        await _armazenadorDeEmpresa.Alterar(empresaAlterarDto.Id, empresaAlterarDto);
+        await _empresaService.Alterar(empresaAlterarDto.Id, empresaAlterarDto);
         
         // assert
         _empresaRepositorioMock.Verify(r =>  r.Alterar(It.IsAny<Empresa>()), Times.Once());
@@ -197,21 +202,46 @@ public class ArmazenadorDeEmpresaTests
         _notificationContextMock.Verify(
             x => x.AddNotification(It.IsAny<Notification>()), Times.Never);
     }
+    #endregion
 
+    #region Excluir
     [Fact]
-    public async Task QuandoEmpresaExistir_DeveExcluirEmpresa()
+    public async Task QuandoEmpresaExistirENaoTiverFuncionariosVinculados_DeveExcluirEmpresa()
     {
         // arrange
         var empresa = EmpresaBuilder.Nova().Build();
         _empresaRepositorioMock.Setup(r => r.ObterPorId(empresa.Id))
             .ReturnsAsync(empresa);
         
+        var listaFuncionarios = new List<Funcionario>();
+        _funcionarioRepositorioMock.Setup(r => r.VerificarSePossuiFuncionarioVinculado(empresa.Id))
+            .ReturnsAsync(listaFuncionarios);
+        
         // act 
-        await _armazenadorDeEmpresa.Excluir(empresa.Id);
+        await _empresaService.Excluir(empresa.Id);
         // assert
         _empresaRepositorioMock.Verify(r => r.Excluir(It.IsAny<Empresa>()), Times.Once);
         _notificationContextMock.Verify(
             x => x.AddNotification(It.IsAny<Notification>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task QuandoEmpresaExistirETiverFuncionariosVinculados_NaoDeveExcluir()
+    {
+        // arrange 
+        var empresa = EmpresaBuilder.Nova().Build();
+        _empresaRepositorioMock.Setup(r => r.ObterPorId(empresa.Id)).ReturnsAsync(empresa);
+        var funcionario = FuncionarioBuilder.Novo().Build();
+        var listaDeFuncionarios = new List<Funcionario>{funcionario};
+        _funcionarioRepositorioMock.Setup(r => r.VerificarSePossuiFuncionarioVinculado(empresa.Id))
+            .ReturnsAsync(listaDeFuncionarios);
+        
+        // act
+        await _empresaService.Excluir(empresa.Id);
+        
+        // assert
+        _empresaRepositorioMock.Verify(r => r.Excluir(It.IsAny<Empresa>()), Times.Never);
+        _notificationContextMock.Verify(x => x.AddNotification(Resource.KeyEmpresa, Resource.NaoEPossivelExcluirEmpresa));
     }
     
     [Fact]
@@ -221,12 +251,14 @@ public class ArmazenadorDeEmpresaTests
         var id = -1;
         
         // act 
-        await _armazenadorDeEmpresa.Excluir(id);
+        await _empresaService.Excluir(id);
         
         // assert
         _empresaRepositorioMock.Verify(r => r.Excluir(It.IsAny<Empresa>()), Times.Never);
         _notificationContextMock.Verify(
             x => x.AddNotification(Resource.KeyEmpresa, Resource.EmpresaNaoEncontrada), Times.Once);
     }
+    #endregion
+    
     
 }

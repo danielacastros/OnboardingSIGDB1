@@ -5,8 +5,8 @@ using OnboardingSIGDB1.Domain.Base;
 using OnboardingSIGDB1.Domain.Dto.Funcionario;
 using OnboardingSIGDB1.Domain.Entity;
 using OnboardingSIGDB1.Domain.Interfaces;
+using OnboardingSIGDB1.Domain.Interfaces.Funcionarios;
 using OnboardingSIGDB1.Domain.Notifications;
-using OnboardingSIGDB1.Domain.Services;
 
 namespace OnboardingSIGDB1.API.Controllers;
 
@@ -14,17 +14,17 @@ namespace OnboardingSIGDB1.API.Controllers;
 [Route("api/funcionarios")]
 public class FuncionarioController : ControllerBase
 {
-    private readonly ArmazenadorDeFuncionario _armazenadorDeFuncionario;
+    private readonly IFuncionarioService _funcionarioService;
     private readonly IFuncionarioRepositorio _funcionarioRepositorio;
     private readonly INotificationContext _notificationContext;
     private readonly IMapper _mapper;
 
-    public FuncionarioController(ArmazenadorDeFuncionario armazenadorDeFuncionario,
+    public FuncionarioController(IFuncionarioService funcionarioService,
         IFuncionarioRepositorio funcionarioRepositorio,
         INotificationContext notificationContext,
         IMapper mapper)
     {
-        _armazenadorDeFuncionario = armazenadorDeFuncionario;
+        _funcionarioService = funcionarioService;
         _funcionarioRepositorio = funcionarioRepositorio;
         _notificationContext = notificationContext;
         _mapper = mapper;
@@ -134,7 +134,7 @@ public class FuncionarioController : ControllerBase
             return BadRequest(_notificationContext);
         }
 
-        await _armazenadorDeFuncionario.Armazenar(funcionarioDto);
+        await _funcionarioService.Armazenar(funcionarioDto);
 
         if (_notificationContext.HasNotifications)
         {
@@ -144,10 +144,10 @@ public class FuncionarioController : ControllerBase
         return Ok(funcionarioDto);
     }
 
-    [HttpPost("vincular-empresa")]
-    public async Task<IActionResult> Post([FromBody] VinculoEmpresaDto vinculoEmpresaDto)
+    [HttpPut("vincular-empresa")]
+    public async Task<IActionResult> VincularFuncionarioEmpresa([FromBody] VinculoEmpresaDto vinculoEmpresaDto)
     {
-        await _armazenadorDeFuncionario.VincularEmpresa(vinculoEmpresaDto);
+        await _funcionarioService.VincularEmpresa(vinculoEmpresaDto);
         
         if (_notificationContext.HasNotifications)
         {
@@ -157,7 +157,18 @@ public class FuncionarioController : ControllerBase
         return Ok(vinculoEmpresaDto);
     }
 
-    
+    [HttpPost("vincular-cargo")]
+    public async Task<IActionResult> VincularCargo([FromBody] FuncionarioCargoDto funcionarioCargoDto)
+    {
+        await _funcionarioService.VincularCargo(funcionarioCargoDto);
+
+        if (_notificationContext.HasNotifications)
+        {
+            return BadRequest(_notificationContext.Notifications);
+        }
+
+        return Ok(funcionarioCargoDto);
+    }
 
     [HttpPut]
     public async Task<IActionResult> Put(int id, [FromBody] FuncionarioDto funcionarioDto)
@@ -168,14 +179,14 @@ public class FuncionarioController : ControllerBase
             return BadRequest(_notificationContext);
         }
 
-        await _armazenadorDeFuncionario.Alterar(id, funcionarioDto);
+        await _funcionarioService.Alterar(id, funcionarioDto);
         return Ok(funcionarioDto);
     }
 
     [HttpDelete]
     public async Task<IActionResult> Delete(int id)
     {
-        await _armazenadorDeFuncionario.Excluir(id);
+        await _funcionarioService.Excluir(id);
         
         if (_notificationContext.HasNotifications)
         {

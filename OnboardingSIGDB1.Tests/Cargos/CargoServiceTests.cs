@@ -1,27 +1,27 @@
 ﻿using AutoMapper;
 using Bogus;
 using Moq;
-using OnboardingSIGDB1.Domain.Base;
 using OnboardingSIGDB1.Domain.Interfaces;
+using OnboardingSIGDB1.Domain.Interfaces.Cargos;
 using OnboardingSIGDB1.Domain.Notifications;
 using OnboardingSIGDB1.Domain.Services;
 using OnboardingSIGDB1.Tests._Builders;
 
 namespace OnboardingSIGDB1.Tests.Cargo;
 
-public class ArmazenadorDeCargoTests
+public class CargoServiceTests
 {
     private readonly Faker _faker;
     private readonly Mock<ICargoRepositorio> _cargoRepositorioMock;
-    private readonly ArmazenadorDeCargo _armazenadorDeCargo;
+    private readonly CargoService _cargoService;
     private readonly Mock<INotificationContext> _notificationContextMock;
     private readonly Mock<IMapper> _mapperMock;
-    public ArmazenadorDeCargoTests()
+    public CargoServiceTests()
     {
         _cargoRepositorioMock = new Mock<ICargoRepositorio>();
         _notificationContextMock = new Mock<INotificationContext>();
         _mapperMock = new Mock<IMapper>();
-        _armazenadorDeCargo = new ArmazenadorDeCargo(_cargoRepositorioMock.Object, _notificationContextMock.Object, _mapperMock.Object);
+        _cargoService = new CargoService(_cargoRepositorioMock.Object, _notificationContextMock.Object, _mapperMock.Object);
     }
 
     [Fact]
@@ -35,7 +35,7 @@ public class ArmazenadorDeCargoTests
             .Returns(cargo);
         
         // act
-        await _armazenadorDeCargo.Armazenar(cargoDto);
+        await _cargoService.Armazenar(cargoDto);
 
         // assert
         _cargoRepositorioMock.Verify(r => r.Adicionar(It.Is<Domain.Entity.Cargo>(x => 

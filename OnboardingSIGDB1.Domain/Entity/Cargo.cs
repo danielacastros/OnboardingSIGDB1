@@ -1,10 +1,12 @@
-﻿using OnboardingSIGDB1.Domain.Notifications.Validators;
+﻿using System.Collections.Generic;
+using OnboardingSIGDB1.Domain.Notifications.Validators;
 
 namespace OnboardingSIGDB1.Domain.Entity;
 
 public class Cargo : Entidade
 {
     public string Descricao { get; set; }
+    public virtual ICollection<FuncionarioCargo> Funcionarios { get; private set; }
 
     public Cargo(string descricao)
     {

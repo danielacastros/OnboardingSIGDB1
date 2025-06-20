@@ -32,18 +32,15 @@ public class RepositorioBase<TEntidade> : IRepositorio<TEntidade> where TEntidad
     public async Task Adicionar(TEntidade entity)
     {
         Context.Set<TEntidade>().Add(entity);
-        await Context.SaveChangesAsync();
     }
 
     public async Task Alterar(TEntidade entity)
     {
         Context.Set<TEntidade>().Update(entity);
-        await Context.SaveChangesAsync();
     }
 
     public async Task Excluir(TEntidade entity)
     {
         Context.Set<TEntidade>().Remove(entity);
-        await Context.SaveChangesAsync();
     }
 }

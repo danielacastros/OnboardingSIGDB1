@@ -1,5 +1,6 @@
 ﻿#nullable enable
 using System;
+using System.Collections.Generic;
 using OnboardingSIGDB1.Domain.Notifications.Validators;
 using OnboardingSIGDB1.Domain.Utils;
 
@@ -12,6 +13,7 @@ public class Funcionario : Entidade
     public DateTime? DataContratacao { get; private set; }
     public int? EmpresaId { get; private set; }
     public virtual Empresa? Empresa { get; private set; }
+    public virtual ICollection<FuncionarioCargo> Cargos { get; private set; }
     public Funcionario(string nome, string cpf, DateTime? dataContratacao)
     {
         Nome = nome;

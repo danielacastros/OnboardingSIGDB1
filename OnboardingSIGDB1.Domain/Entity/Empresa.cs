@@ -9,9 +9,7 @@ namespace OnboardingSIGDB1.Domain.Entity;
 public class Empresa : Entidade
 {
     public string Nome { get; private set; }
-
     public string Cnpj { get; private set; }
-
     public DateTime? DataFundacao { get; private set; }
     public virtual ICollection<Funcionario> Funcionarios { get; private set; }
     public Empresa(string cnpj, string nome, DateTime? dataFundacao)

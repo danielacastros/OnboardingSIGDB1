@@ -6,24 +6,33 @@ using OnboardingSIGDB1.Domain.Base;
 using OnboardingSIGDB1.Domain.Dto.Funcionario;
 using OnboardingSIGDB1.Domain.Entity;
 using OnboardingSIGDB1.Domain.Interfaces;
+using OnboardingSIGDB1.Domain.Interfaces.Cargos;
+using OnboardingSIGDB1.Domain.Interfaces.Empresas;
+using OnboardingSIGDB1.Domain.Interfaces.Funcionarios;
 using OnboardingSIGDB1.Domain.Utils;
 
 namespace OnboardingSIGDB1.Domain.Services;
 
-public class ArmazenadorDeFuncionario
+public class FuncionarioService : IFuncionarioService
 {
     private readonly IFuncionarioRepositorio _funcionarioRepositorio;
     private readonly IEmpresaRepositorio _empresaRepositorio;
+    private readonly ICargoRepositorio _cargoRepositorio;
+    private readonly IFuncionarioCargoRepositorio _funcionarioCargoRepositorio;
     private readonly INotificationContext _notificationContext;
     private readonly IMapper _mapper;
     
-    public ArmazenadorDeFuncionario(IFuncionarioRepositorio funcionarioRepositorio, 
+    public FuncionarioService(IFuncionarioRepositorio funcionarioRepositorio, 
         IEmpresaRepositorio empresaRepositorio,
+        ICargoRepositorio cargoRepositorio,
+        IFuncionarioCargoRepositorio funcionarioCargoRepositorio,
         INotificationContext notificationContext, 
         IMapper mapper)
     {
         _funcionarioRepositorio = funcionarioRepositorio;
         _empresaRepositorio = empresaRepositorio;
+        _cargoRepositorio = cargoRepositorio;
+        _funcionarioCargoRepositorio = funcionarioCargoRepositorio;
         _notificationContext = notificationContext;
         _mapper = mapper;
     }
@@ -132,5 +141,49 @@ public class ArmazenadorDeFuncionario
         }
 
         await _empresaRepositorio.Alterar(empresa);
+    }
+
+    public async Task VincularCargo(FuncionarioCargoDto funcionarioCargoDto)
+    {
+        if (funcionarioCargoDto == null)
+        {
+            _notificationContext.AddNotification(Resource.KeyFuncionario, Resource.DadosNaoFornecidos);
+            return;
+        }
+
+        var funcionario = await _funcionarioRepositorio.ObterPorId(funcionarioCargoDto.FuncionarioId);
+        if (funcionario is null)
+        {
+            _notificationContext.AddNotification(Resource.KeyFuncionario, Resource.FuncionarioNaoEncontrado);
+            return;
+        }
+        
+        if (funcionario.EmpresaId == null)
+        {
+            _notificationContext.AddNotification(Resource.KeyFuncionario, Resource.FuncionarioNaoPossuiVinculoComNenhumaEmpresa);
+            return;
+        }
+
+        var cargo = await _cargoRepositorio.ObterPorId(funcionarioCargoDto.CargoId);
+        if (cargo is null)
+        {
+            _notificationContext.AddNotification(Resource.KeyCargo, Resource.CargoNaoEncontrado);
+            return;
+        }
+
+        if (funcionario.Cargos != null)
+        {
+            foreach (var car in funcionario.Cargos)
+            {
+                if (car.CargoId == funcionarioCargoDto.CargoId)
+                {
+                    _notificationContext.AddNotification(Resource.KeyFuncionario, Resource.CargoJaCadastradoParaOFuncionario);
+                    return;
+                }
+            }
+        }
+        
+        FuncionarioCargo funcionarioCargo = _mapper.Map<FuncionarioCargo>(funcionarioCargoDto);
+        await _funcionarioCargoRepositorio.Adicionar(funcionarioCargo);
     }
 }

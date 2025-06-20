@@ -11,13 +11,13 @@ public class EmpresaValidator : AbstractValidator<Empresa>
     public EmpresaValidator()
     {
         RuleFor(e => e.Nome)
-            .NotEmpty()
-            .MaximumLength(150);
+            .NotEmpty().WithMessage(Resource.NomeObrigatorio)
+            .MaximumLength(150).WithMessage(Resource.QuantidadeDeCaracteresInvalida);
 
         RuleFor(e => e.Cnpj)
-            .NotEmpty()
-            .MaximumLength(14)
-            .Must(ValidarCnpj);
+            .NotEmpty().WithMessage(Resource.CnpjObrigatorio)
+            .MaximumLength(14).WithMessage(Resource.QuantidadeDeCaracteresInvalida)
+            .Must(ValidarCnpj).WithMessage(Resource.CnpjInvalido);
 
         RuleFor(e => e.DataFundacao)
             .GreaterThan(DateTime.MinValue)

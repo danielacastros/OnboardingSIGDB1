@@ -6,6 +6,7 @@ using OnboardingSIGDB1.Domain.Dto;
 using OnboardingSIGDB1.Domain.Dto.Funcionario;
 using OnboardingSIGDB1.Domain.Entity;
 using OnboardingSIGDB1.Domain.Interfaces;
+using OnboardingSIGDB1.Domain.Interfaces.Empresas;
 using OnboardingSIGDB1.Domain.Notifications;
 using OnboardingSIGDB1.Domain.Services;
 using OnboardingSIGDB1.Domain.Utils;
@@ -16,15 +17,15 @@ namespace OnboardingSIGDB1.API.Controllers;
 [Route("api/empresas")]
 public class EmpresaController : ControllerBase
 {
-    private readonly ArmazenadorDeEmpresa _armazenadorDeEmpresa;
+    private readonly IEmpresaService _empresaService;
     private readonly IEmpresaRepositorio _empresaRepositorio;
     private readonly INotificationContext _notificationContext;
 
-    public EmpresaController(ArmazenadorDeEmpresa armazenadorDeEmpresa, 
+    public EmpresaController(IEmpresaService empresaService, 
         IEmpresaRepositorio empresaRepositorio, 
         INotificationContext notificationContext)
     {
-        _armazenadorDeEmpresa = armazenadorDeEmpresa;
+        _empresaService = empresaService;
         _empresaRepositorio = empresaRepositorio;
         _notificationContext = notificationContext;
         
@@ -151,6 +152,7 @@ public class EmpresaController : ControllerBase
         {
             Nome = empresa.Nome,
             Cnpj = empresa.Cnpj,
+            DataFundacao = empresa.DataFundacao,
             Funcionarios = empresa.Funcionarios.Select(f => new FuncionarioDto
             {
                 Nome = f.Nome,
@@ -176,7 +178,7 @@ public class EmpresaController : ControllerBase
             return BadRequest(_notificationContext);
         }
         
-        await _armazenadorDeEmpresa.Armazenar(empresaDto);
+        await _empresaService.Armazenar(empresaDto);
         
         if (_notificationContext.HasNotifications)
         {
@@ -201,7 +203,7 @@ public class EmpresaController : ControllerBase
             return BadRequest(_notificationContext);
         }
         
-        await _armazenadorDeEmpresa.Alterar(id, alterarEmpresaDto);
+        await _empresaService.Alterar(id, alterarEmpresaDto);
         
         if (_notificationContext.HasNotifications)
             return BadRequest(_notificationContext.Notifications);
@@ -217,7 +219,7 @@ public class EmpresaController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
-        await _armazenadorDeEmpresa.Excluir(id);
+        await _empresaService.Excluir(id);
         if (_notificationContext.HasNotifications)
             return BadRequest(_notificationContext.Notifications);
         return Ok();

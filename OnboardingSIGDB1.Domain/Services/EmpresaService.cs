@@ -4,17 +4,19 @@ using OnboardingSIGDB1.Domain.Base;
 using OnboardingSIGDB1.Domain.Dto;
 using OnboardingSIGDB1.Domain.Entity;
 using OnboardingSIGDB1.Domain.Interfaces;
+using OnboardingSIGDB1.Domain.Interfaces.Empresas;
+using OnboardingSIGDB1.Domain.Interfaces.Funcionarios;
 using OnboardingSIGDB1.Domain.Utils;
 namespace OnboardingSIGDB1.Domain.Services;
 
-public class ArmazenadorDeEmpresa  
+public class EmpresaService : IEmpresaService
 {
     private readonly IEmpresaRepositorio _empresaRepositorio;
     private readonly IFuncionarioRepositorio _funcionarioRepositorio;
     private readonly INotificationContext _notificationContext;
     private readonly IMapper _mapper;
 
-    public ArmazenadorDeEmpresa(IEmpresaRepositorio empresaRepositorio, IFuncionarioRepositorio funcionarioRepositorio,
+    public EmpresaService(IEmpresaRepositorio empresaRepositorio, IFuncionarioRepositorio funcionarioRepositorio,
         INotificationContext notificationContext, 
         IMapper mapper)
     {
@@ -52,7 +54,8 @@ public class ArmazenadorDeEmpresa
             
             return;
         }
-        
+
+        //empresa.Validar(empresa);
         await _empresaRepositorio.Adicionar(empresa);
     }
 
@@ -79,7 +82,7 @@ public class ArmazenadorDeEmpresa
 
             return;
         }
-        
+        //empresa.Validar(empresa);
         await _empresaRepositorio.Alterar(empresa);
     }
 

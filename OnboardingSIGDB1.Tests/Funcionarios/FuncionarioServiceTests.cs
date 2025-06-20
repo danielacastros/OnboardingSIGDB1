@@ -4,6 +4,9 @@ using Moq;
 using OnboardingSIGDB1.Domain.Base;
 using OnboardingSIGDB1.Domain.Entity;
 using OnboardingSIGDB1.Domain.Interfaces;
+using OnboardingSIGDB1.Domain.Interfaces.Cargos;
+using OnboardingSIGDB1.Domain.Interfaces.Empresas;
+using OnboardingSIGDB1.Domain.Interfaces.Funcionarios;
 using OnboardingSIGDB1.Domain.Notifications;
 using OnboardingSIGDB1.Domain.Notifications.Validators;
 using OnboardingSIGDB1.Domain.Services;
@@ -12,22 +15,28 @@ using OnboardingSIGDB1.Tests._Builders;
 
 namespace OnboardingSIGDB1.Tests.Funcionarios;
 
-public class ArmazenadorDeFuncionarioTests
+public class FuncionarioServiceTests
 {
-    private ArmazenadorDeFuncionario _armazenadorDeFuncionario;
+    private FuncionarioService _funcionarioService;
     private readonly Mock<IFuncionarioRepositorio> _funcionarioRepositorioMock;
     private readonly Mock<IEmpresaRepositorio> _empresaRepositorioMock;
+    private readonly Mock<ICargoRepositorio> _cargoRepositorioMock;
+    private readonly Mock<IFuncionarioCargoRepositorio> _funcionarioCargoRepositorioMock;
     private Mock<INotificationContext> _notificationContextMock;
     private Mock<IMapper> _mapperMock;
 
-    public ArmazenadorDeFuncionarioTests()
+    public FuncionarioServiceTests()
     {
         _funcionarioRepositorioMock = new Mock<IFuncionarioRepositorio>();
         _empresaRepositorioMock = new Mock<IEmpresaRepositorio>();
+        _cargoRepositorioMock = new Mock<ICargoRepositorio>();
+        _funcionarioCargoRepositorioMock = new Mock<IFuncionarioCargoRepositorio>();
         _notificationContextMock = new Mock<INotificationContext>();
         _mapperMock = new Mock<IMapper>();
-        _armazenadorDeFuncionario = new ArmazenadorDeFuncionario(_funcionarioRepositorioMock.Object, 
-            _empresaRepositorioMock.Object, 
+        _funcionarioService = new FuncionarioService(_funcionarioRepositorioMock.Object, 
+            _empresaRepositorioMock.Object,
+            _cargoRepositorioMock.Object,
+            _funcionarioCargoRepositorioMock.Object,
             _notificationContextMock.Object, 
             _mapperMock.Object);
     }
@@ -49,7 +58,7 @@ public class ArmazenadorDeFuncionarioTests
         _funcionarioRepositorioMock.Setup(r => r.BuscarPorCpf(cpfFormatado)).ReturnsAsync(funcionario);
         
         // act
-        await _armazenadorDeFuncionario.Armazenar(funcionarioDto);
+        await _funcionarioService.Armazenar(funcionarioDto);
         
         // assert
         _notificationContextMock.Verify(x => x.AddNotification(It.IsAny<Notification>()), Times.Never);
@@ -73,7 +82,7 @@ public class ArmazenadorDeFuncionarioTests
             .Returns(funcionario);
         
         // act
-        await _armazenadorDeFuncionario.Armazenar(funcionarioDto);
+        await _funcionarioService.Armazenar(funcionarioDto);
         
         // assert
         _funcionarioRepositorioMock.Verify(f => f.Adicionar(It.IsAny<Funcionario>()), Times.Never);
@@ -103,7 +112,7 @@ public class ArmazenadorDeFuncionarioTests
             .ReturnsAsync(funcionario);
         
         // act
-        await _armazenadorDeFuncionario.Armazenar(funcionarioDto);
+        await _funcionarioService.Armazenar(funcionarioDto);
         
         // assert
         _funcionarioRepositorioMock.Verify(r => r.Adicionar(It.IsAny<Funcionario>()), Times.Never);
@@ -125,7 +134,7 @@ public class ArmazenadorDeFuncionarioTests
             .Returns(funcionario);
 
         // act
-        await _armazenadorDeFuncionario.Armazenar(funcionarioDto);
+        await _funcionarioService.Armazenar(funcionarioDto);
         
         // assert
         _funcionarioRepositorioMock.Verify(f => f.Adicionar(It.IsAny<Funcionario>()), Times.Never);
@@ -142,7 +151,7 @@ public class ArmazenadorDeFuncionarioTests
         _mapperMock.Setup(m => m.Map<Funcionario>(funcionarioDto)).Returns(funcionario);
         
         // act
-        await _armazenadorDeFuncionario.Armazenar(funcionarioDto);
+        await _funcionarioService.Armazenar(funcionarioDto);
 
         // assert
         _funcionarioRepositorioMock.Verify(r => r.Adicionar(It.IsAny<Funcionario>()), Times.Never);
@@ -160,7 +169,7 @@ public class ArmazenadorDeFuncionarioTests
             .Setup(m => m.Map<Funcionario>(funcionarioDto))
             .Returns(funcionario);
         // act
-        await _armazenadorDeFuncionario.Armazenar(funcionarioDto);
+        await _funcionarioService.Armazenar(funcionarioDto);
         
         // assert
         _funcionarioRepositorioMock.Verify(r => 
@@ -180,7 +189,7 @@ public class ArmazenadorDeFuncionarioTests
             .Setup(m => m.Map<Funcionario>(funcionarioDto))
             .Returns(funcionario);
         // act
-        await _armazenadorDeFuncionario.Armazenar(funcionarioDto);
+        await _funcionarioService.Armazenar(funcionarioDto);
         
         // assert
         _funcionarioRepositorioMock.Verify(r => 
@@ -197,7 +206,7 @@ public class ArmazenadorDeFuncionarioTests
         int id = 0;
         
         //act 
-        await _armazenadorDeFuncionario.Excluir(id);
+        await _funcionarioService.Excluir(id);
         
         // assert
         _funcionarioRepositorioMock.Verify(r => r.Excluir(It.IsAny<Funcionario>()), Times.Never);
@@ -212,7 +221,7 @@ public class ArmazenadorDeFuncionarioTests
         _funcionarioRepositorioMock.Setup(r => r.ObterPorId(funcionario.Id)).ReturnsAsync(funcionario);
 
         //act
-        await _armazenadorDeFuncionario.Excluir(funcionario.Id);
+        await _funcionarioService.Excluir(funcionario.Id);
         
         //assert
         _funcionarioRepositorioMock.Verify(r => r.Excluir(It.IsAny<Funcionario>()), Times.Once);
@@ -225,13 +234,13 @@ public class ArmazenadorDeFuncionarioTests
         // arrange 
         var vinculoEmpresaDto = VinculoEmpresaDtoBuilder.Novo().Build();
         var empresa = EmpresaBuilder.Nova().Build();
-        var funcionario = FuncionarioBuilder.Novo().ComEmpresaId(vinculoEmpresaDto.EmpresaId).ComEmpresa(empresa).Build();
+        var funcionario = FuncionarioBuilder.Novo().ComEmpresa(empresa).Build();
         
         _empresaRepositorioMock.Setup(r => r.ObterPorId(vinculoEmpresaDto.EmpresaId)).ReturnsAsync(empresa);
         _funcionarioRepositorioMock.Setup(r => r.ObterPorId(vinculoEmpresaDto.FuncionarioId)).ReturnsAsync(funcionario);
         
         // act
-        await _armazenadorDeFuncionario.VincularEmpresa(vinculoEmpresaDto);
+        await _funcionarioService.VincularEmpresa(vinculoEmpresaDto);
         
         // assert
         _funcionarioRepositorioMock.Verify(r => r.Alterar(It.IsAny<Funcionario>()), Times.Never);
@@ -239,38 +248,3 @@ public class ArmazenadorDeFuncionarioTests
         
     }
 }
-
-
-/*
- public async Task VincularEmpresa(VinculoEmpresaDto vinculoEmpresaDto)
-    {
-        if (vinculoEmpresaDto == null)
-        {
-            _notificationContext.AddNotification(Resource.KeyFuncionario, Resource.DadosNaoFornecidos);
-            return;
-        }
-
-        var funcionario = await _funcionarioRepositorio.ObterPorId(vinculoEmpresaDto.FuncionarioId);
-        if (funcionario == null)
-        {
-            _notificationContext.AddNotification(Resource.KeyFuncionario, Resource.FuncionarioNaoEncontrado);
-            return;
-        }
-        
-        var empresa = await _empresaRepositorio.ObterPorId(vinculoEmpresaDto.EmpresaId);
-        if (empresa == null)
-        {
-            _notificationContext.AddNotification(Resource.KeyEmpresa, Resource.EmpresaNaoEncontrada);
-            return;
-        }
-        
-        var vinculoFuncionarioEmpresa = funcionario.VincularEmpresa(empresa);
-        if (!vinculoFuncionarioEmpresa)
-        {
-            _notificationContext.AddNotification(Resource.KeyFuncionario, Resource.VinculoJaCadastrado);
-            return;
-        }
-
-        await _empresaRepositorio.Alterar(empresa);
-    }
- */

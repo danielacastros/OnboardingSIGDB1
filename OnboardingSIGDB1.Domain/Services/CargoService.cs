@@ -4,16 +4,17 @@ using OnboardingSIGDB1.Domain.Base;
 using OnboardingSIGDB1.Domain.Dto.Cargo;
 using OnboardingSIGDB1.Domain.Entity;
 using OnboardingSIGDB1.Domain.Interfaces;
+using OnboardingSIGDB1.Domain.Interfaces.Cargos;
 
 namespace OnboardingSIGDB1.Domain.Services;
 
-public class ArmazenadorDeCargo
+public class CargoService : ICargoService
 {
     private readonly ICargoRepositorio _cargoRepositorio;
     private readonly INotificationContext _notificationContext;
     private readonly IMapper _mapper;
     
-    public ArmazenadorDeCargo(ICargoRepositorio cargoRepositorio,
+    public CargoService(ICargoRepositorio cargoRepositorio,
         INotificationContext notificationContext,
         IMapper mapper)
     {
