@@ -9,6 +9,7 @@ using OnboardingSIGDB1.Domain.Interfaces;
 using OnboardingSIGDB1.Domain.Interfaces.Cargos;
 using OnboardingSIGDB1.Domain.Interfaces.Empresas;
 using OnboardingSIGDB1.Domain.Interfaces.Funcionarios;
+using OnboardingSIGDB1.Domain.Notifications.Validators;
 using OnboardingSIGDB1.Domain.Utils;
 
 namespace OnboardingSIGDB1.Domain.Services;
@@ -37,7 +38,7 @@ public class FuncionarioService : IFuncionarioService
         _mapper = mapper;
     }
 
-    public async Task Armazenar(FuncionarioDto funcionarioDto)
+    public async Task Salvar(FuncionarioDto funcionarioDto)
     {
         if (funcionarioDto == null)
         {
@@ -60,7 +61,7 @@ public class FuncionarioService : IFuncionarioService
         }
 
         Funcionario funcionario = _mapper.Map<Funcionario>(funcionarioDto);
-        
+        funcionario.Validar(funcionario, new FuncionarioValidator());
         if (funcionario.Invalid)
         {
             foreach (var erro in funcionario.ValidationResult.Errors)
@@ -85,7 +86,8 @@ public class FuncionarioService : IFuncionarioService
         funcionario.AlterarNome(funcionarioDto.Nome);
         funcionario.AlterarCpf(funcionarioDto.Cpf);
         funcionario.AlterarDataContratacao(funcionarioDto.DataContratacao);
-
+        
+        funcionario.Validar(funcionario, new FuncionarioValidator());
         if (funcionario.Invalid)
         {
             foreach (var erro in funcionario.ValidationResult.Errors)

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using OnboardingSIGDB1.Domain.Base;
+using OnboardingSIGDB1.Domain.Dto;
 using OnboardingSIGDB1.Domain.Dto.Funcionario;
 using OnboardingSIGDB1.Domain.Entity;
 using OnboardingSIGDB1.Domain.Interfaces;
@@ -58,6 +59,34 @@ public class FuncionarioController : ControllerBase
         var listaDeFuncionariosFormatoDto = _mapper.Map<List<BuscarFuncionariosComEmpresaDto>>(funcionarios);
         
         return Ok(listaDeFuncionariosFormatoDto);
+    }
+    
+    [HttpGet("todos-com-empresa-e-cargo")]
+    public async Task<IActionResult> GetCompleto(int id)
+    {
+        var funcionario = await _funcionarioRepositorio.ObterTodosComEmpresaECargo(id);
+        var cargoMaisRecente = funcionario.Cargos
+            .OrderByDescending(f => f.DataVinculo)
+            .FirstOrDefault();
+        //var listaDeFuncionarios = _mapper.Map<List<BuscarFuncionariosComEmpresaECargoDto>>(funcionarios);
+        var funcionarioDto = new BuscarFuncionariosComEmpresaECargoDto
+        {
+            Id = funcionario.Id,
+            Nome = funcionario.Nome,
+            Cpf = funcionario.Cpf,
+            DataContratacao = funcionario.DataContratacao,
+            Empresa = new EmpresaDtoSimplificado
+            {
+                Nome = funcionario.Empresa.Nome,
+                Cnpj = funcionario.Empresa.Cnpj
+            },
+            VinculoFuncionarioCargo = new VinculoFuncionarioCargoDto
+            {
+                Descricao = cargoMaisRecente.Cargo.Descricao
+            }
+            
+        };
+        return Ok(funcionarioDto);
     }
 
     [HttpGet("id")]
@@ -134,7 +163,7 @@ public class FuncionarioController : ControllerBase
             return BadRequest(_notificationContext);
         }
 
-        await _funcionarioService.Armazenar(funcionarioDto);
+        await _funcionarioService.Salvar(funcionarioDto);
 
         if (_notificationContext.HasNotifications)
         {

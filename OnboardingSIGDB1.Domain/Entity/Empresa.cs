@@ -24,19 +24,16 @@ public class Empresa : Entidade
     public void AlterarCnpj(string cnpj)
     {
         Cnpj = CnpjHelper.FormatarCnpj(cnpj);
-        Validar(this, new EmpresaValidator());
     }
 
     public void AlterarNome(string nome)
     {
         Nome = nome;
-        Validar(this, new EmpresaValidator());
     }
 
     public void AlterarDataFundacao(DateTime? fundacao)
     {
         DataFundacao = fundacao;
-        Validar(this, new EmpresaValidator());
     }
 
     public void Alterar(Empresa empresa)
@@ -44,7 +41,5 @@ public class Empresa : Entidade
         Nome = empresa.Nome;
         Cnpj = CnpjHelper.FormatarCnpj(empresa.Cnpj);
         DataFundacao = empresa.DataFundacao;
-        
-        Validar(this, new EmpresaValidator());
     }
 }

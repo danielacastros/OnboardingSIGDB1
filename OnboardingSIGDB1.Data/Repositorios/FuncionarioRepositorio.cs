@@ -47,6 +47,35 @@ public class FuncionarioRepositorio : RepositorioBase<Funcionario>, IFuncionario
             .Include(f => f.Empresa).ToListAsync();
         return funcionarios.Count > 0 ? funcionarios : new List<Funcionario>();
     }
+
+    public async Task<List<Funcionario>> ObterFuncionarioComInformacoesCompletas()
+    {
+        List<Funcionario> funcionarios = await Context.Funcionarios
+            .Include(f => f.Empresa)
+            .Include(f => f.Cargos) 
+            .ThenInclude(fc => fc.Cargo) 
+            .OrderByDescending(f => f.Cargos
+                .Max(fc => fc.DataVinculo)) 
+            .ToListAsync();
+
+        return funcionarios;
+
+    }
+
+    public async Task<Funcionario> ObterTodosComEmpresaECargo(int id)
+    {
+        var funcionario = await Context.Set<Funcionario>()
+            .Include(f => f.Empresa)
+            .Include(f => f.Cargos)
+                .ThenInclude(fc => fc.Cargo)
+            .Where(f => f.Id == id)
+            .OrderByDescending(f => f.Cargos.Max(fc => fc.DataVinculo))
+            .FirstOrDefaultAsync(f => f.Id == id);
+
+        funcionario.Cargos.OrderByDescending(f => f.DataVinculo).FirstOrDefault();
+        
+        return funcionario;
+    }
     
     public async Task<List<Funcionario>> VerificarSePossuiFuncionarioVinculado(int id)
     {

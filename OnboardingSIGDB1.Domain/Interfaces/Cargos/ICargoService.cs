@@ -5,7 +5,7 @@ namespace OnboardingSIGDB1.Domain.Interfaces.Cargos;
 
 public interface ICargoService
 {
-    Task Armazenar(CargoDto cargoDto);
+    Task Salvar(CargoDto cargoDto);
     Task Alterar(int id, CargoDto cargoDto);
     Task Excluir(int id);
 }

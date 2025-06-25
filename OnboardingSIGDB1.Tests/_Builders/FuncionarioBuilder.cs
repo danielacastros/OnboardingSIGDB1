@@ -22,8 +22,8 @@ public class FuncionarioBuilder
         _nome = _faker.Person.FullName;
         _cpf = _faker.Person.Cpf();
         _dataContratacao = _faker.Date.Past(10, DateTime.Now);
-        _empresa = EmpresaBuilder.Nova().Build();
-        _empresaId = _empresa.Id;
+        _empresa = null;
+        _empresaId = null;
     }
 
     public static FuncionarioBuilder Novo()
@@ -54,6 +54,12 @@ public class FuncionarioBuilder
         _dataContratacao = dataContratacao;
         return this;
     }
+
+    public FuncionarioBuilder ComEmpresaId(int? empresaId)
+    {
+        _empresaId = empresaId;
+        return this;
+    }
     
     public FuncionarioBuilder ComEmpresa(Empresa? empresa)
     {
@@ -64,12 +70,10 @@ public class FuncionarioBuilder
 
     public Funcionario Build()
     {
-        var funcionario = new Funcionario(_nome, _cpf, _dataContratacao);
+        var funcionario = new Funcionario(_nome, _cpf, _dataContratacao, _empresaId);
         
         if (_empresa != null)
-        {
             funcionario.VincularEmpresa(_empresa);
-        }
         
         return funcionario;
     }

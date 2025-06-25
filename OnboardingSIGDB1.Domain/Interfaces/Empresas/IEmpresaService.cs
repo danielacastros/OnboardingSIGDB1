@@ -5,7 +5,7 @@ namespace OnboardingSIGDB1.Domain.Interfaces.Empresas;
 
 public interface IEmpresaService
 {
-    Task Armazenar(EmpresaDto empresaDto);
+    Task Salvar(EmpresaDto empresaDto);
     Task Alterar(int id, AlterarEmpresaDto alterarEmpresaDto);
     Task Excluir(int id);
 }

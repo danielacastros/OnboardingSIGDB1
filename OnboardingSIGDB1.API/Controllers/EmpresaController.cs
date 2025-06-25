@@ -178,7 +178,7 @@ public class EmpresaController : ControllerBase
             return BadRequest(_notificationContext);
         }
         
-        await _empresaService.Armazenar(empresaDto);
+        await _empresaService.Salvar(empresaDto);
         
         if (_notificationContext.HasNotifications)
         {

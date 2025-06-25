@@ -59,7 +59,7 @@ public class EmpresaServiceTests
             .ReturnsAsync((Empresa)null);
         
         //act 
-        await _empresaService.Armazenar(empresaDto);
+        await _empresaService.Salvar(empresaDto);
 
         //assert
         _empresaRepositorioMock.Verify(r => r.Adicionar(It.Is<Empresa>(x =>
@@ -88,7 +88,7 @@ public class EmpresaServiceTests
             .ReturnsAsync(empresaEsperada);
         
         //act
-        await _empresaService.Armazenar(empresaDto);
+        await _empresaService.Salvar(empresaDto);
         
         //assert
         _empresaRepositorioMock.Verify(e => 
@@ -119,7 +119,7 @@ public class EmpresaServiceTests
             .ReturnsAsync((Empresa)null);
         
         //act
-        await _empresaService.Armazenar(empresaDto);
+        await _empresaService.Salvar(empresaDto);
 
         //assert
         _empresaRepositorioMock.Verify(e => 
@@ -145,7 +145,7 @@ public class EmpresaServiceTests
         _output.WriteLine("empresaDto ==>" + empresaDto.Nome.ToString(), empresaDto.DataFundacao.ToString(), empresaDto.Cnpj.ToString());
         _output.WriteLine("empresa ==>" + empresa.Nome.ToString(), empresa.DataFundacao.ToString(), empresa.Cnpj.ToString());
         //act
-        await _empresaService.Armazenar(empresaDto);
+        await _empresaService.Salvar(empresaDto);
 
         //assert
         _empresaRepositorioMock.Verify(e => 
@@ -170,7 +170,7 @@ public class EmpresaServiceTests
             .Returns(empresa);
         
         //act
-        await _empresaService.Armazenar(empresaDto);
+        await _empresaService.Salvar(empresaDto);
 
         //assert
         _empresaRepositorioMock.Verify(e => 

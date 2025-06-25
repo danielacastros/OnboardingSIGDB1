@@ -5,6 +5,7 @@ using OnboardingSIGDB1.Domain.Dto.Cargo;
 using OnboardingSIGDB1.Domain.Entity;
 using OnboardingSIGDB1.Domain.Interfaces;
 using OnboardingSIGDB1.Domain.Interfaces.Cargos;
+using OnboardingSIGDB1.Domain.Notifications.Validators;
 
 namespace OnboardingSIGDB1.Domain.Services;
 
@@ -23,9 +24,11 @@ public class CargoService : ICargoService
         _mapper = mapper;
     }
 
-    public async Task Armazenar(CargoDto cargoDto)
+    public async Task Salvar(CargoDto cargoDto)
     {
         Cargo cargo = _mapper.Map<Cargo>(cargoDto);
+        cargo.Validar(cargo, new CargoValidator());
+        
         if (cargo == null || cargo.Invalid)
         {
             foreach (var erro in cargo.ValidationResult.Errors)

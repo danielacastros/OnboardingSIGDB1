@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using OnboardingSIGDB1.Data.Mappings;
 using OnboardingSIGDB1.Domain.Entity;
+using OnboardingSIGDB1.Domain.Interfaces;
 
 namespace OnboardingSIGDB1.Data.Contextos;
 

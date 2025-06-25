@@ -18,6 +18,5 @@ public class Cargo : Entidade
     public void AlterarDescricao(string descricao)
     {
         Descricao = descricao;
-        Validar(this, new CargoValidator());
     }
 }

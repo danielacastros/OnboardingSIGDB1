@@ -3,14 +3,15 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Newtonsoft.Json;
+using OnboardingSIGDB1.Domain.Interfaces;
 
 namespace OnboardingSIGDB1.Domain.Notifications;
 
 public class NotificationFilter : IAsyncResultFilter 
 {
-    private NotificationContext _notificationContext;
+    private INotificationContext _notificationContext;
     
-    public NotificationFilter(NotificationContext notificationContext)
+    public NotificationFilter(INotificationContext notificationContext)
     {
         _notificationContext = notificationContext;
     }

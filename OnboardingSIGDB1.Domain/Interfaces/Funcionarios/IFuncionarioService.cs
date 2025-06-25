@@ -5,7 +5,7 @@ namespace OnboardingSIGDB1.Domain.Interfaces.Funcionarios;
 
 public interface IFuncionarioService
 {
-    Task Armazenar(FuncionarioDto funcionarioDto);
+    Task Salvar(FuncionarioDto funcionarioDto);
     Task Alterar(int id, FuncionarioDto funcionarioDto);
     Task Excluir(int id);
     Task VincularEmpresa(VinculoEmpresaDto vinculoEmpresaDto);

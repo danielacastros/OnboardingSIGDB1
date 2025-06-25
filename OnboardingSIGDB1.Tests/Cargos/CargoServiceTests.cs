@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Bogus;
 using Moq;
+using OnboardingSIGDB1.Domain.Base;
 using OnboardingSIGDB1.Domain.Interfaces;
 using OnboardingSIGDB1.Domain.Interfaces.Cargos;
 using OnboardingSIGDB1.Domain.Notifications;
@@ -35,11 +36,32 @@ public class CargoServiceTests
             .Returns(cargo);
         
         // act
-        await _cargoService.Armazenar(cargoDto);
+        await _cargoService.Salvar(cargoDto);
 
         // assert
         _cargoRepositorioMock.Verify(r => r.Adicionar(It.Is<Domain.Entity.Cargo>(x => 
             x.Descricao == cargo.Descricao)), Times.Once);
         _notificationContextMock.Verify(x => x.AddNotification(It.IsAny<Notification>()), Times.Never);
     }
+
+    [Fact]
+    public async Task QuandoDadosInvalidos_NaoDeveSalvarCargo()
+    {
+        // arrange
+        var cargoDto = CargoDtoBuilder.Novo().Build();
+        var cargo = CargoBuilder.Novo().ComDescricao("").Build();
+
+        _mapperMock.Setup(m => m.Map<Domain.Entity.Cargo>(cargoDto))
+            .Returns(cargo);
+        
+        // act 
+        await _cargoService.Salvar(cargoDto);
+        
+        // assert
+        _cargoRepositorioMock.Verify(r => 
+            r.Adicionar(It.IsAny<Domain.Entity.Cargo>()), Times.Never);
+        _notificationContextMock.Verify(x => 
+            x.AddNotification(nameof(Domain.Entity.Cargo.Descricao), Resource.DescricaoObrigatoria));
+    }
+    
 }

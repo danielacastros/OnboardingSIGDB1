@@ -45,7 +45,7 @@ public class CargoController : ControllerBase
             _notificationContext.AddNotification(Resource.KeyCargo, Resource.DadosNaoFornecidos);
         }
 
-        await _cargoService.Armazenar(cargoDto);
+        await _cargoService.Salvar(cargoDto);
         
         if (_notificationContext.HasNotifications)
         {

@@ -6,6 +6,7 @@ using OnboardingSIGDB1.Domain.Entity;
 using OnboardingSIGDB1.Domain.Interfaces;
 using OnboardingSIGDB1.Domain.Interfaces.Empresas;
 using OnboardingSIGDB1.Domain.Interfaces.Funcionarios;
+using OnboardingSIGDB1.Domain.Notifications.Validators;
 using OnboardingSIGDB1.Domain.Utils;
 namespace OnboardingSIGDB1.Domain.Services;
 
@@ -16,7 +17,8 @@ public class EmpresaService : IEmpresaService
     private readonly INotificationContext _notificationContext;
     private readonly IMapper _mapper;
 
-    public EmpresaService(IEmpresaRepositorio empresaRepositorio, IFuncionarioRepositorio funcionarioRepositorio,
+    public EmpresaService(IEmpresaRepositorio empresaRepositorio, 
+        IFuncionarioRepositorio funcionarioRepositorio,
         INotificationContext notificationContext, 
         IMapper mapper)
     {
@@ -26,7 +28,7 @@ public class EmpresaService : IEmpresaService
         _mapper = mapper;
     }
 
-    public async Task Armazenar(EmpresaDto empresaDto)
+    public async Task Salvar(EmpresaDto empresaDto)
     {
         var cnpjFormatado = CnpjHelper.FormatarCnpj(empresaDto.Cnpj);
         if (string.IsNullOrEmpty(cnpjFormatado))
@@ -45,17 +47,16 @@ public class EmpresaService : IEmpresaService
         
         Empresa empresa = _mapper.Map<Empresa>(empresaDto);
         
-        if (empresa == null || empresa.Invalid)
+        empresa.Validar(empresa, new EmpresaValidator());
+        if (empresa.Invalid)
         {
             foreach (var erro in empresa.ValidationResult.Errors)
             {
                 _notificationContext.AddNotification(erro.PropertyName, erro.ErrorMessage);
             }
-            
             return;
         }
-
-        //empresa.Validar(empresa);
+        
         await _empresaRepositorio.Adicionar(empresa);
     }
 
@@ -73,16 +74,15 @@ public class EmpresaService : IEmpresaService
         empresa.AlterarCnpj(alterarEmpresaDto.Cnpj);
         empresa.AlterarDataFundacao(alterarEmpresaDto.DataFundacao);
         
+        empresa.Validar(empresa, new EmpresaValidator());
         if (empresa.Invalid)
         {
-            foreach (var error in empresa.ValidationResult.Errors)
+            foreach (var erro in empresa.ValidationResult.Errors)
             {
-                _notificationContext.AddNotification(error.PropertyName, error.ErrorMessage);
+                _notificationContext.AddNotification(erro.PropertyName, erro.ErrorMessage);
             }
-
             return;
         }
-        //empresa.Validar(empresa);
         await _empresaRepositorio.Alterar(empresa);
     }
 

@@ -1,6 +1,7 @@
 ﻿using Bogus;
 using Bogus.Extensions.Brazil;
 using OnboardingSIGDB1.Domain.Dto.Funcionario;
+using OnboardingSIGDB1.Domain.Entity;
 
 namespace OnboardingSIGDB1.Tests._Builders;
 
@@ -10,6 +11,7 @@ public class FuncionarioDtoBuilder
     private string _nome;
     private string _cpf;
     private DateTime? _dataContratacao;
+    private int? _empresaId;
 
     public FuncionarioDtoBuilder()
     {
@@ -18,6 +20,7 @@ public class FuncionarioDtoBuilder
         _nome = _faker.Person.FullName;
         _cpf = _faker.Person.Cpf();
         _dataContratacao = _faker.Date.Past(10, DateTime.Today);
+        _empresaId = null;
     }
 
     public static FuncionarioDtoBuilder Novo()
@@ -42,14 +45,24 @@ public class FuncionarioDtoBuilder
         _dataContratacao = dataContratacao;
         return this;
     }
+    
+    public FuncionarioDtoBuilder ComEmpresaId(int? empresaId)
+    {
+        _empresaId = _empresaId;
+        return this;
+    }
 
     public FuncionarioDto Build()
     {
-        return new FuncionarioDto
+        
+        var funcionario = new FuncionarioDto
         {
             Nome = _nome,
             Cpf = _cpf,
-            DataContratacao = _dataContratacao
+            DataContratacao = _dataContratacao,
+            EmpresaId = _empresaId
         };
+
+        return funcionario;
     }
 }

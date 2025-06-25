@@ -12,11 +12,13 @@ using OnboardingSIGDB1.Domain.Notifications.Validators;
 using OnboardingSIGDB1.Domain.Services;
 using OnboardingSIGDB1.Domain.Utils;
 using OnboardingSIGDB1.Tests._Builders;
+using Xunit.Abstractions;
 
 namespace OnboardingSIGDB1.Tests.Funcionarios;
 
 public class FuncionarioServiceTests
 {
+    private readonly ITestOutputHelper _output;
     private FuncionarioService _funcionarioService;
     private readonly Mock<IFuncionarioRepositorio> _funcionarioRepositorioMock;
     private readonly Mock<IEmpresaRepositorio> _empresaRepositorioMock;
@@ -25,7 +27,7 @@ public class FuncionarioServiceTests
     private Mock<INotificationContext> _notificationContextMock;
     private Mock<IMapper> _mapperMock;
 
-    public FuncionarioServiceTests()
+    public FuncionarioServiceTests(ITestOutputHelper output)
     {
         _funcionarioRepositorioMock = new Mock<IFuncionarioRepositorio>();
         _empresaRepositorioMock = new Mock<IEmpresaRepositorio>();
@@ -39,8 +41,11 @@ public class FuncionarioServiceTests
             _funcionarioCargoRepositorioMock.Object,
             _notificationContextMock.Object, 
             _mapperMock.Object);
+
+        _output = output;
     }
-    
+
+    #region Criar
     [Fact]
     public async Task QuandoDadosValidos_DeveArmazenarFuncionario()
     {
@@ -52,17 +57,25 @@ public class FuncionarioServiceTests
             .ComNome(funcionarioDto.Nome)
             .ComCpf(funcionarioDto.Cpf)
             .ComDataDeContratacao(funcionarioDto.DataContratacao)
+            .ComEmpresaId(funcionarioDto.EmpresaId)
             .Build();
         var cpfFormatado = CpfHelper.FormatarCpf(funcionarioDto.Cpf);
 
-        _funcionarioRepositorioMock.Setup(r => r.BuscarPorCpf(cpfFormatado)).ReturnsAsync(funcionario);
+        _funcionarioRepositorioMock.Setup(r => r.BuscarPorCpf(cpfFormatado)).ReturnsAsync((Funcionario)null);
+        _mapperMock.Setup(m => m.Map<Funcionario>(funcionarioDto)).Returns(funcionario);
+        _output.WriteLine("funcionarioDTO ===> " + funcionarioDto.Nome.ToString() + " " + funcionarioDto.Cpf.ToString()+ " " + funcionarioDto.DataContratacao.ToString() + " " + funcionarioDto.EmpresaId.ToString());
+        _output.WriteLine("funcionario ===> " + funcionario.Nome.ToString()+ " " + funcionario.Cpf.ToString()+ " " + funcionario.DataContratacao.ToString()+ " " + funcionario.EmpresaId.ToString());
         
         // act
-        await _funcionarioService.Armazenar(funcionarioDto);
+        await _funcionarioService.Salvar(funcionarioDto);
         
         // assert
+        _funcionarioRepositorioMock.Verify(f => f.Adicionar(It.Is<Funcionario>(x => 
+            x.Nome == funcionarioDto.Nome &&
+            x.DataContratacao == funcionarioDto.DataContratacao &&
+            x.Cpf == CpfHelper.FormatarCpf(funcionarioDto.Cpf) && 
+            x.EmpresaId == funcionarioDto.EmpresaId)), Times.Once);
         _notificationContextMock.Verify(x => x.AddNotification(It.IsAny<Notification>()), Times.Never);
-        
     }
     
     [Fact]
@@ -82,7 +95,7 @@ public class FuncionarioServiceTests
             .Returns(funcionario);
         
         // act
-        await _funcionarioService.Armazenar(funcionarioDto);
+        await _funcionarioService.Salvar(funcionarioDto);
         
         // assert
         _funcionarioRepositorioMock.Verify(f => f.Adicionar(It.IsAny<Funcionario>()), Times.Never);
@@ -112,7 +125,7 @@ public class FuncionarioServiceTests
             .ReturnsAsync(funcionario);
         
         // act
-        await _funcionarioService.Armazenar(funcionarioDto);
+        await _funcionarioService.Salvar(funcionarioDto);
         
         // assert
         _funcionarioRepositorioMock.Verify(r => r.Adicionar(It.IsAny<Funcionario>()), Times.Never);
@@ -134,7 +147,7 @@ public class FuncionarioServiceTests
             .Returns(funcionario);
 
         // act
-        await _funcionarioService.Armazenar(funcionarioDto);
+        await _funcionarioService.Salvar(funcionarioDto);
         
         // assert
         _funcionarioRepositorioMock.Verify(f => f.Adicionar(It.IsAny<Funcionario>()), Times.Never);
@@ -151,7 +164,7 @@ public class FuncionarioServiceTests
         _mapperMock.Setup(m => m.Map<Funcionario>(funcionarioDto)).Returns(funcionario);
         
         // act
-        await _funcionarioService.Armazenar(funcionarioDto);
+        await _funcionarioService.Salvar(funcionarioDto);
 
         // assert
         _funcionarioRepositorioMock.Verify(r => r.Adicionar(It.IsAny<Funcionario>()), Times.Never);
@@ -169,7 +182,7 @@ public class FuncionarioServiceTests
             .Setup(m => m.Map<Funcionario>(funcionarioDto))
             .Returns(funcionario);
         // act
-        await _funcionarioService.Armazenar(funcionarioDto);
+        await _funcionarioService.Salvar(funcionarioDto);
         
         // assert
         _funcionarioRepositorioMock.Verify(r => 
@@ -189,7 +202,7 @@ public class FuncionarioServiceTests
             .Setup(m => m.Map<Funcionario>(funcionarioDto))
             .Returns(funcionario);
         // act
-        await _funcionarioService.Armazenar(funcionarioDto);
+        await _funcionarioService.Salvar(funcionarioDto);
         
         // assert
         _funcionarioRepositorioMock.Verify(r => 
@@ -198,6 +211,123 @@ public class FuncionarioServiceTests
             x.AddNotification(nameof(Funcionario.DataContratacao), Resource.DataInvalida));
         
     }
+    
+
+    #endregion
+
+    #region Alterar
+
+    [Fact]
+    public async Task QuandoDadosValidos_DeveAlterarFuncionario()
+    {
+        // arrange 
+        int id = 4;
+        var funcionarioDto = FuncionarioDtoBuilder.Novo().Build();
+        var funcionario = FuncionarioBuilder.Novo()
+            .ComId(id)
+            .ComNome(funcionarioDto.Nome)
+            .ComCpf(funcionarioDto.Cpf)
+            .ComDataDeContratacao(funcionarioDto.DataContratacao)
+            .Build();
+
+        _funcionarioRepositorioMock.Setup(r => r.ObterPorId(id)).ReturnsAsync(funcionario);
+        
+        // act 
+        await _funcionarioService.Alterar(id, funcionarioDto);
+
+        // assert
+        _funcionarioRepositorioMock.Verify(r => r.Alterar(It.Is<Funcionario>(x => 
+            x.Nome == funcionarioDto.Nome &&
+            x.Cpf == CpfHelper.FormatarCpf(funcionarioDto.Cpf) && 
+            x.DataContratacao == funcionarioDto.DataContratacao)), Times.Once);
+        _notificationContextMock.Verify(x => x.AddNotification(It.IsAny<Notification>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task QuandoDadosInvalidos_NaoDeveAlterarFuncionario()
+    {
+        // arrange
+        int id = 4;
+        
+        var funcionarioDto = FuncionarioDtoBuilder.Novo()
+            .ComNome("")
+            .ComCpf("")
+            .ComDataDeContratacao(DateTime.MinValue)
+            .Build();
+        var funcionario = FuncionarioBuilder.Novo()
+            .ComId(id)
+            .ComNome(funcionarioDto.Nome)
+            .ComCpf(funcionarioDto.Cpf)
+            .ComDataDeContratacao(funcionarioDto.DataContratacao)
+            .Build();
+
+        _funcionarioRepositorioMock.Setup(r => r.ObterPorId(id)).ReturnsAsync(funcionario);
+        
+        // act
+        await _funcionarioService.Alterar(id, funcionarioDto);
+        
+        // assert
+        _funcionarioRepositorioMock.Verify(r => r.Alterar(It.IsAny<Funcionario>()), Times.Never);
+        _notificationContextMock.Verify(x => x.AddNotification(It.IsAny<string>(), It.IsAny<string>()), Times.AtLeast(1));
+    }
+
+    [Fact]
+    public async Task QuandoFuncionarioInexistente_DeveRetornarNotificacao()
+    {
+        // arrange
+        var id = 3;
+        var funcionarioDto = FuncionarioDtoBuilder.Novo().Build();
+
+        _funcionarioRepositorioMock.Setup(r => r.ObterPorId(id)).ReturnsAsync((Funcionario)null);
+        
+        // act
+        await _funcionarioService.Alterar(id, funcionarioDto);
+        
+        // assert
+        _funcionarioRepositorioMock.Verify(f => 
+            f.Alterar(It.IsAny<Funcionario>()), Times.Never);
+        _notificationContextMock.Verify(x => 
+            x.AddNotification(Resource.KeyFuncionario, Resource.FuncionarioNaoEncontrado));
+    }
+
+    [Fact]
+    public async Task QuandoCpfInvalido_NaoDeveAlterarFuncionario()
+    {
+        // arrange
+        var id = 3;
+        var funcionarioDto = FuncionarioDtoBuilder.Novo().ComCpf("416.553.018-30").Build();
+        var funcionario = FuncionarioBuilder.Novo().ComCpf(funcionarioDto.Cpf).Build();
+        _funcionarioRepositorioMock.Setup(f => f.ObterPorId(id)).ReturnsAsync(funcionario);
+        
+        // act
+        await _funcionarioService.Alterar(id, funcionarioDto);
+        
+        // assert
+        _funcionarioRepositorioMock.Verify(f => f.Alterar(It.IsAny<Funcionario>()), Times.Never);
+        _notificationContextMock.Verify(x => x.AddNotification(nameof(Funcionario.Cpf), Resource.CpfInvalido), Times.Once);
+    }
+
+    [Fact]
+    public async Task QuandoNomeInvalido_NaoDeveAlterarFuncionario()
+    {
+        // arrange
+        var id = 3;
+        var funcionarioDto = FuncionarioDtoBuilder.Novo().ComNome("").Build();
+        var funcionario = FuncionarioBuilder.Novo().ComNome(funcionarioDto.Nome).Build();
+        _funcionarioRepositorioMock.Setup(f => f.ObterPorId(id)).ReturnsAsync(funcionario);
+        
+        // act
+        // act
+        await _funcionarioService.Alterar(id, funcionarioDto);
+        
+        // assert
+        _funcionarioRepositorioMock.Verify(f => f.Alterar(It.IsAny<Funcionario>()), Times.Never);
+        _notificationContextMock.Verify(x => x.AddNotification(nameof(Funcionario.Nome), Resource.NomeObrigatorio), Times.Once);
+    }
+
+    #endregion
+    
+    #region Excluir
 
     [Fact]
     public async Task QuandoIdInvalido_NaoDeveExcluirFuncionario()
@@ -228,6 +358,9 @@ public class FuncionarioServiceTests
         _notificationContextMock.Verify(x => x.AddNotification(It.IsAny<Notification>()), Times.Never);
     }
 
+    #endregion
+    
+    
     [Fact]
     public async Task QuandoFuncionarioVinculadoAEmpresa_NaoDeveAlterarVinculo()
     {

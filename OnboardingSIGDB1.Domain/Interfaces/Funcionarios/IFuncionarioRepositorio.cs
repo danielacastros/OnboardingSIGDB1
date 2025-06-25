@@ -11,5 +11,7 @@ public interface IFuncionarioRepositorio : IRepositorio<Funcionario>
     Task<List<Funcionario>> BuscarPorNome(string nome);
     Task<List<Funcionario>> ObterTodosPorIntervaloDataContratacao(DateTime dataInicial, DateTime dataFinal);
     Task<List<Funcionario>> ObterTodosComEmpresa();
+    //Task<List<Funcionario>> ObterTodosComEmpresaECargo();
+    Task<Funcionario> ObterTodosComEmpresaECargo(int id);
     Task<List<Funcionario>> VerificarSePossuiFuncionarioVinculado(int id);
 }
